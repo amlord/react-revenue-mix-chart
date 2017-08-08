@@ -11,13 +11,13 @@ class revenueChart extends React.Component
             revenueMix: props.revenueMix
         };
 
-        this.drawrevenueChart = this.drawrevenueChart.bind(this);
+        this.drawRevenueChart = this.drawRevenueChart.bind(this);
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     updateDimensions()
     {
-        this.drawrevenueChart();
+        this.drawRevenueChart();
     }
 
     componentWillReceiveProps( nextProps )
@@ -34,7 +34,7 @@ class revenueChart extends React.Component
 
     componentDidMount()
     {
-        this.drawrevenueChart();
+        this.drawRevenueChart();
 
         // add an event to redraw the chart on resize
         window.addEventListener("resize", this.updateDimensions);
@@ -42,12 +42,12 @@ class revenueChart extends React.Component
 
     componentDidUpdate()
     {
-        this.drawrevenueChart();
+        this.drawRevenueChart();
     }
 
-    drawrevenueChart()
+    drawRevenueChart()
     {
-        const data = this.state.revenueMix,
+        const data = this.state.revenueMix.data,
             goldenRatio = 1.61803398875;
 
         // get min & max data values
@@ -59,10 +59,10 @@ class revenueChart extends React.Component
         let width = document.querySelector('.revenueChart').offsetWidth;
         let height = width / goldenRatio;
         let margin = {
-            top: 5,
-            bottom: 20,
+            top: 30,
+            bottom: 30,
             left: 30,
-            right: 10
+            right: 30
         };
         let innerWidth = width - margin.left - margin.right;
         let innerHeight = height - margin.top - margin.bottom;
@@ -72,70 +72,56 @@ class revenueChart extends React.Component
         let svg = d3.select(".revenueChart").append("svg")
                     .attr("width", width)
                     .attr("height", height);
+
+        let pieBg = svg.append("circle")
+                        .classed("revenueChart__pieBg", true)
+                        .attr("cx", ( width / 2 ) )
+                        .attr("cy", ( height / 2 ) )
+                        .attr("r", ( innerHeight / 2 ) );
         
         let chart = svg.append("g")
-                        .classed("revenueChart__bars", true)
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                        .classed("revenueChart__arcs", true);
         
-        let xAxisGroup = svg.append("g")
-                        .classed("revenueChart__axis revenueChart__axis--x", true)
-                        .attr("transform", "translate(" + margin.left + "," + ( height - margin.bottom ) + ")");
+        let pieFg = svg.append("g")
+                        .classed("revenueChart__pieFg", true);
+
+        // // add bars to the chart
+        // chart.selectAll(".revenueChart__bar")
+        //     .data(data)
+        //     .enter()
+        //         .append("rect")
+        //         .classed("revenueChart__bar", true)
+        //         .attr("x", (d, i) =>
+        //         {
+        //             return x(d.name) + ( x.bandwidth() * 0.125 );
+        //         })
+        //         .attr("y", (d, i) =>
+        //         {
+        //             yPos.push( parseFloat(d.value) );
+
+        //             // first & last bars
+        //             if(i === 0 || i === ( data.length - 1 ) )
+        //             {
+        //                 return y(d.value);
+        //             }
+
+        //             /* bars 'eroding' first bar value (+ve / -ve 
+        //                depending on cumalative GM% effect) */
+        //             return ( data[i].gmPercent > data[i-1].gmPercent ) ?
+        //                 y( parseFloat(data[i].gmPercent) ) :
+        //                 y( parseFloat(data[i-1].gmPercent) );
+        //         })
+        //         .attr("width", x.bandwidth() - ( x.bandwidth() * 0.25 ) )
+        //         .attr("height", (d, i) =>
+        //         {
+        //             return  innerHeight - y(Math.abs(d.value));
+        //         });
         
-        let yAxisGroup = svg.append("g")
-                        .classed("revenueChart__axis revenueChart__axis--y", true)
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        let y = d3.scaleLinear()
-            .domain([0, dMax])
-            .range([innerHeight, 0]);
-
-        let x = d3.scaleBand()
-            .domain(data.map(d =>
-            {
-                return d.name;
-            }))
-            .range([0, innerWidth]);
-
-        let xAxis = d3.axisBottom(x);
-        let yAxis = d3.axisLeft(y);
-
-        let yPos = [];
-
-        // add bars to the chart
-        chart.selectAll(".revenueChart__bar")
-            .data(data)
-            .enter()
-                .append("rect")
-                .classed("revenueChart__bar", true)
-                .attr("x", (d, i) =>
-                {
-                    return x(d.name) + ( x.bandwidth() * 0.125 );
-                })
-                .attr("y", (d, i) =>
-                {
-                    yPos.push( parseFloat(d.value) );
-
-                    // first & last bars
-                    if(i === 0 || i === ( data.length - 1 ) )
-                    {
-                        return y(d.value);
-                    }
-
-                    /* bars 'eroding' first bar value (+ve / -ve 
-                       depending on cumalative GM% effect) */
-                    return ( data[i].gmPercent > data[i-1].gmPercent ) ?
-                        y( parseFloat(data[i].gmPercent) ) :
-                        y( parseFloat(data[i-1].gmPercent) );
-                })
-                .attr("width", x.bandwidth() - ( x.bandwidth() * 0.25 ) )
-                .attr("height", (d, i) =>
-                {
-                    return  innerHeight - y(Math.abs(d.value));
-                });
-        
-        // add the axes
-        xAxisGroup.call(xAxis);
-        yAxisGroup.call(yAxis);
+        pieFg.append("circle")
+            .classed("revenueChart__pieFg", true)
+            .attr("cx", ( width / 2 ) )
+            .attr("cy", ( height / 2 ) )
+            .attr("r", ( innerHeight / 2 ) * 0.6228813559322034 );
     }
 
     render()

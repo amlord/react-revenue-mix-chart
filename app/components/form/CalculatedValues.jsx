@@ -53,7 +53,7 @@ class CalculatedValues extends React.Component
                                     return (
                                         <CalculatedValuesCell 
                                             index={index}
-                                            value={cell.value}
+                                            value={cell.revenuePercent}
                                             key={index}
                                         />
                                     )

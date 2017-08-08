@@ -176,79 +176,43 @@ function calcRevenueMixChartValues( data )
   let chartValues = [],
       activeData = data.slice();
 
-  // remove unneeded items
-  activeData.splice( 0, 1 );
-  activeData.splice( activeData.length - 1, 1 );
+  // remove totals
+  const TOTAL = activeData.splice( activeData.length - 1, 1 )[0];
 
-  // order array by GM Percentage value
-  activeData.sort((a, b) =>
+  // create the revenue mix chart data
+  for (var i = 0; i < activeData.length; i++)
   {
-    if(parseFloat(a.gmPercent) < parseFloat(b.gmPercent))
+    let revenuePercent = ( activeData[i].revenue / TOTAL.revenue ) * 100;
+
+    // add chart data to the array
+    chartValues.push({
+      name: activeData[i].displayName,
+      gmPercent: activeData[i].gmPercent,
+      revenue: activeData[i].revenue,
+      revenuePercent: revenuePercent.toFixed(1)
+    });
+  }
+
+  // order array by revenue Percentage value
+  chartValues.sort((a, b) =>
+  {
+    if(parseFloat(a.revenuePercent) < parseFloat(b.revenuePercent))
     {
       return 1;
     }
-    if(parseFloat(a.gmPercent) > parseFloat(b.gmPercent))
+    if(parseFloat(a.revenuePercent) > parseFloat(b.revenuePercent))
     {
       return -1;
     }
     return 0;
   });
 
-  activeData.unshift( data[STANDARD] );
-
-  // start GM% value
-  chartValues.push({
-    name: "Standard",
-    gmPercent: data[STANDARD].gmPercent,
-    value: data[STANDARD].gmPercent
+console.log({
+    data: chartValues,
+    totals: TOTAL
   });
-
-  // create the revenue mix chart data
-  for (var i = 1; i < activeData.length; i++)
-  {
-    // get the cumalative revenue value
-    let cumalativeRev = activeData.reduce((sum, value, index) => 
-    {
-      if(index <= i)
-      {
-        return sum + value.revenue
-      }
-
-      return sum;
-    }, 0);
-
-    // get the cumalative 'cost of goods' value
-    let cumalativeCogs = activeData.reduce((sum, value, index) => 
-    {
-      if(index <= i)
-      {
-        return sum + value.cogs
-      }
-
-      return sum;
-    }, 0);
-
-    // work out the cumalative GM%
-    let gmPercent = ( ( cumalativeRev - cumalativeCogs ) / cumalativeRev ) * 100;
-    gmPercent = parseFloat(Math.round(gmPercent * 100) / 100).toFixed(1);
-
-    // work out the GM difference with the previous row
-    let gmDiff = chartValues[i-1].gmPercent - gmPercent;
-    gmDiff = parseFloat(Math.round(gmDiff * 100) / 100).toFixed(1) * -1;
-
-    // add chart data to the array
-    chartValues.push({
-      name: activeData[i].displayName,
-      gmPercent: gmPercent,
-      value: gmDiff
-    });
-  }
-
-  // actual GM% value
-  chartValues.push({
-    name: "Actual",
-    value: data[TOTAL].gmPercent
-  });
-
-  return chartValues;
+  return {
+    data: chartValues,
+    totals: TOTAL
+  };
 }
