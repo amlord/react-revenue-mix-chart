@@ -21,8 +21,6 @@ export const SET_SEGMENTED_COGS = 'SET_SEGMENTED_COGS'
 export const SET_CONTRACT_COGS = 'SET_CONTRACT_COGS'
 export const SET_PROMOTIONAL_COGS = 'SET_PROMOTIONAL_COGS'
 
-export const SET_TARGET_GM = 'SET_TARGET_GM'
-
 /* ACTION CREATORS */
 export function loadData(data)
 {
@@ -111,12 +109,3 @@ export function setPromotionalGmCogs(cogs)
         cogs: cogs
     }
 }
-
-export function setTargetGm(targetGm)
-{
-    return {
-        type: SET_TARGET_GM,
-        target: targetGm
-    }
-}
-

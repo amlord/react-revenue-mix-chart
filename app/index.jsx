@@ -9,11 +9,11 @@ const { createStore } = Redux;
 
 // user-defined app components
 let { setSearchText, LOAD_DATA } = require('./api/redux/actions.js');
-let { gmWaterfallApp, INITIAL_STATE } = require('./api/redux/reducers.js');
-let GmErosionWaterfall = require('./components/GmErosionWaterfall.jsx');
+let { gmRevenueMixApp, INITIAL_STATE } = require('./api/redux/reducers.js');
+let RevenueMix = require('./components/RevenueMix.jsx');
 
 // define Redux data store
-let store = createStore( gmWaterfallApp, INITIAL_STATE );
+let store = createStore( gmRevenueMixApp, INITIAL_STATE );
 
 // specific dealer map styles
 require('./styles/index.css');
@@ -21,7 +21,7 @@ require('./styles/index.css');
 // React entry point for the dealer map
 ReactDOM.render(
   <Provider store={store}>
-    <GmErosionWaterfall />
+    <RevenueMix />
   </Provider>,
-  document.getElementById('gmErosionWaterfall')
+  document.getElementById('gmRevenueMix')
 );

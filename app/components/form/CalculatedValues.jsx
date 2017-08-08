@@ -8,44 +8,18 @@ class CalculatedValues extends React.Component
         super(props);
 
         this.state = {
-            waterfall: props.waterfall,
-            gmTarget: props.target
+            revenueMix: props.revenueMix
         };
-
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange( event )
-    {
-        let value = parseInt( event.target.value );
-        let name = event.target.name;
-
-        if( isNaN( value ) )
-        {
-            value = 0;
-        }
-
-        this.setState(
-            { gmTarget: value },
-            () => { this.props.onTargetGmUpdate( value ); }
-        );
     }
 
     componentWillReceiveProps( nextProps )
     {
-        let { waterfall, target } = this.state;
+        let { revenueMix } = this.state;
 
-        if( nextProps.waterfall !== waterfall )
+        if( nextProps.revenueMix !== revenueMix )
         {
             this.setState({
-                waterfall: nextProps.waterfall
-            });
-        }
-
-        if( nextProps.target !== target )
-        {
-            this.setState({
-                gmTarget: nextProps.target
+                revenueMix: nextProps.revenueMix
             });
         }
     }
@@ -62,7 +36,7 @@ class CalculatedValues extends React.Component
                         <thead>
                             <tr>
                                 <th></th>
-                                {this.state.waterfall.map((cell, index) => {
+                                {this.state.revenueMix.map((cell, index) => {
                                     return (
                                         <CalculatedValuesHeaderCell 
                                             name={cell.name}
@@ -73,9 +47,9 @@ class CalculatedValues extends React.Component
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className="waterfallData">
+                            <tr className="revenueData">
                                 <td>Value</td>
-                                {this.state.waterfall.map((cell, index) => {
+                                {this.state.revenueMix.map((cell, index) => {
                                     return (
                                         <CalculatedValuesCell 
                                             index={index}
@@ -84,22 +58,6 @@ class CalculatedValues extends React.Component
                                         />
                                     )
                                 })}
-                            </tr>
-                            <tr className="waterfallData">
-                                <td>Target</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <div className="fieldContainer">
-                                        <input
-                                            name="gmTarget"
-                                            value={this.state.gmTarget}
-                                            onChange={this.handleChange} />
-                                    </div>
-                                </td>
                             </tr>
                         </tbody>
                     </table>

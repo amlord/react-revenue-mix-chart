@@ -16,8 +16,7 @@ const {
   SET_DISCOUNT_COGS,
   SET_SEGMENTED_COGS,
   SET_CONTRACT_COGS,
-  SET_PROMOTIONAL_COGS,
-  SET_TARGET_GM
+  SET_PROMOTIONAL_COGS
 } = require('./actions');
 
 export const INITIAL_STATE = {
@@ -48,14 +47,13 @@ export const INITIAL_STATE = {
       revenue: 9032,
       cogs: 8619
     }
-  ],
-  target: 35
+  ]
 };
 
 /* REDUCERS */
-export function gmWaterfallApp( state = initialState, action )
+export function gmRevenueMixApp( state = initialState, action )
 {
-  let data, targetGm = state.target;
+  let data;
 
   switch( action.type )
   {
@@ -92,20 +90,15 @@ export function gmWaterfallApp( state = initialState, action )
     case SET_PROMOTIONAL_COGS:
       data = setDataCogs( state, PROMOTIONAL, action.cogs );
       break;
-    case SET_TARGET_GM:
-      targetGm = action.target;
-      data = state.data;
-      break;
     default:
       data = state.data;
   }
 
-  let waterfall = calcWaterfallChartValues(data);
+  let revenueMix = calcRevenueMixChartValues(data);
 
   return Object.assign( {}, state, {
     data: data,
-    waterfall: waterfall,
-    target: targetGm
+    revenueMix: revenueMix
   } );
 }
 
@@ -178,7 +171,7 @@ function calcGmPercent( data, rowId )
   return parseFloat(Math.round(gmPercent * 100) / 100).toFixed(1);
 }
 
-function calcWaterfallChartValues( data )
+function calcRevenueMixChartValues( data )
 {
   let chartValues = [],
       activeData = data.slice();
@@ -210,7 +203,7 @@ function calcWaterfallChartValues( data )
     value: data[STANDARD].gmPercent
   });
 
-  // create the waterfall chart data
+  // create the revenue mix chart data
   for (var i = 1; i < activeData.length; i++)
   {
     // get the cumalative revenue value

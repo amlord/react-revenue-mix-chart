@@ -15,7 +15,7 @@ let {
     setPromotionalGmCogs
 } = require('../../api/redux/actions.js');
 const { STANDARD, DISCOUNT, SEGMENTED, CONTRACT, PROMOTIONAL, TOTAL } = require('../../api/redux/actions.js');
-let GmErosionForm = require('./GmErosionForm.jsx');
+let RevenueForm = require('./RevenueForm.jsx');
 
 const mapStateToProps = state =>
 {
@@ -90,9 +90,9 @@ const mapDispatchToProps = dispatch =>
   }
 }
 
-const GmErosionFormContainer = connect(
+const RevenueFormContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(GmErosionForm)
+)(RevenueForm)
 
-module.exports = GmErosionFormContainer;
+module.exports = RevenueFormContainer;

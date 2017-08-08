@@ -1,48 +1,40 @@
 let React = require('react');
 let { connect } = require('react-redux');
 
-class WaterfallChart extends React.Component
+class revenueChart extends React.Component
 {
     constructor(props)
     {
         super(props);
 
         this.state = {
-            waterfall: props.waterfall,
-            target: props.target
+            revenueMix: props.revenueMix
         };
 
-        this.drawWaterfallChart = this.drawWaterfallChart.bind(this);
+        this.drawrevenueChart = this.drawrevenueChart.bind(this);
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     updateDimensions()
     {
-        this.drawWaterfallChart();
+        this.drawrevenueChart();
     }
 
     componentWillReceiveProps( nextProps )
     {
-        let { waterfall, target } = this.state;
+        let { revenueMix } = this.state;
 
-        if( nextProps.waterfall !== waterfall )
+        if( nextProps.revenueMix !== revenueMix )
         {
             this.setState({
-                waterfall: nextProps.waterfall
-            });
-        }
-
-        if( nextProps.target !== target )
-        {
-            this.setState({
-                target: nextProps.target
+                revenueMix: nextProps.revenueMix
             });
         }
     }
 
     componentDidMount()
     {
-        this.drawWaterfallChart();
+        this.drawrevenueChart();
 
         // add an event to redraw the chart on resize
         window.addEventListener("resize", this.updateDimensions);
@@ -50,13 +42,12 @@ class WaterfallChart extends React.Component
 
     componentDidUpdate()
     {
-        this.drawWaterfallChart();
+        this.drawrevenueChart();
     }
 
-    drawWaterfallChart()
+    drawrevenueChart()
     {
-        const data = this.state.waterfall,
-            targetGm = this.state.target,
+        const data = this.state.revenueMix,
             goldenRatio = 1.61803398875;
 
         // get min & max data values
@@ -65,7 +56,7 @@ class WaterfallChart extends React.Component
         });
 
         // calculate height & width (using golden ratio)
-        let width = document.querySelector('.waterfallChart').offsetWidth;
+        let width = document.querySelector('.revenueChart').offsetWidth;
         let height = width / goldenRatio;
         let margin = {
             top: 5,
@@ -76,26 +67,22 @@ class WaterfallChart extends React.Component
         let innerWidth = width - margin.left - margin.right;
         let innerHeight = height - margin.top - margin.bottom;
 
-        d3.select(".waterfallChart svg").remove();
+        d3.select(".revenueChart svg").remove();
 
-        let svg = d3.select(".waterfallChart").append("svg")
+        let svg = d3.select(".revenueChart").append("svg")
                     .attr("width", width)
                     .attr("height", height);
         
         let chart = svg.append("g")
-                        .classed("waterfallChart__bars", true)
+                        .classed("revenueChart__bars", true)
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         
         let xAxisGroup = svg.append("g")
-                        .classed("waterfallChart__axis waterfallChart__axis--x", true)
+                        .classed("revenueChart__axis revenueChart__axis--x", true)
                         .attr("transform", "translate(" + margin.left + "," + ( height - margin.bottom ) + ")");
         
         let yAxisGroup = svg.append("g")
-                        .classed("waterfallChart__axis waterfallChart__axis--y", true)
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
-        let target = svg.append("g")
-                        .classed("waterfallChart__targetGm", true)
+                        .classed("revenueChart__axis revenueChart__axis--y", true)
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         let y = d3.scaleLinear()
@@ -115,11 +102,11 @@ class WaterfallChart extends React.Component
         let yPos = [];
 
         // add bars to the chart
-        chart.selectAll(".waterfallChart__bar")
+        chart.selectAll(".revenueChart__bar")
             .data(data)
             .enter()
                 .append("rect")
-                .classed("waterfallChart__bar", true)
+                .classed("revenueChart__bar", true)
                 .attr("x", (d, i) =>
                 {
                     return x(d.name) + ( x.bandwidth() * 0.125 );
@@ -149,14 +136,6 @@ class WaterfallChart extends React.Component
         // add the axes
         xAxisGroup.call(xAxis);
         yAxisGroup.call(yAxis);
-
-        // add target GM% to the chart
-        target
-            .append("rect").classed("waterfallChart__targetGmLine", true)
-            .attr("x", 0)
-            .attr("y", y(targetGm))
-            .attr("width", innerWidth )
-            .attr("height", 1);
     }
 
     render()
@@ -164,14 +143,14 @@ class WaterfallChart extends React.Component
         return (
             <section className="panel">
                 <header className="panelHeader">
-                    <h1>Gross Margin Waterfall <small>(Last 12 Months)</small></h1>
+                    <h1>Revenue Mix <small>(Last 12 Months)</small></h1>
                 </header>
                 <div className="panelBody">
-                    <div className="waterfallChart"></div>
+                    <div className="revenueChart"></div>
                 </div>
             </section>
         );
     }
 }
 
-module.exports = WaterfallChart;
+module.exports = revenueChart;

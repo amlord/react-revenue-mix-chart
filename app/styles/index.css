@@ -3,13 +3,13 @@ body {
     margin: 0;
 }
 
-#gmErosionWaterfall {
+#gmRevenueMix {
     max-width: 1200px;
     margin: 0 auto;
     font-family: Hind, Arial, Helvetica, sans-serif;
 }
 
-.gmErosionWaterfallContainer {
+.gmRevenueMixContainer {
     padding: 20px;
 }
 
@@ -95,8 +95,8 @@ body {
 }
 
 /* FORM */
-.waterfallData td:nth-child(2) input[readonly],
-.waterfallData td:last-child input[readonly]
+.revenueData td:nth-child(2) input[readonly],
+.revenueData td:last-child input[readonly]
 {
     background: #e7e7e7;
     border: none;
@@ -104,28 +104,28 @@ body {
 
 
 /* CHART */
-.waterfallChart__bar {
+.revenueChart__bar {
     fill: #ccc;
     shape-rendering: crispEdges;
 }
-.waterfallChart__bar:first-of-type {
+.revenueChart__bar:first-of-type {
     fill: #003a5d;
 }
-.waterfallChart__bar:last-of-type {
+.revenueChart__bar:last-of-type {
     fill: #fbb829;
 }
 
-.waterfallChart__barLabel {
+.revenueChart__barLabel {
     font-size: 11px;
     font-weight: bold;
 }
 
-.waterfallChart__axis path,
-.waterfallChart__axis line {
+.revenueChart__axis path,
+.revenueChart__axis line {
     fill: none;
     shape-rendering: crispEdges;
 }
 
-.waterfallChart__targetGmLine {
+.revenueChart__targetGmLine {
     fill: #F02D52;
 }
