@@ -1,0 +1,131 @@
+/* ----- Standalone Setup Styles ----- */
+body {
+    margin: 0;
+}
+
+#gmErosionWaterfall {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Hind, Arial, Helvetica, sans-serif;
+}
+
+.gmErosionWaterfallContainer {
+    padding: 20px;
+}
+
+.panel {
+    max-width: 585px;
+    margin: 20px auto;
+    background: #f2f2f2;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.panel:first-child {
+    margin-top: 0;
+}
+
+.panel:last-child {
+    margin-bottom: 0;
+}
+
+.panelHeader {
+    background: #666;
+    color: #fff;
+    border-radius: 4px 4px 0 0;
+    padding: 8px 15px;
+}
+
+.panelHeader--info {
+    background: #ccc;
+    color: #333;
+}
+
+.panelHeader h1 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.panelHeader small {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.panelBody {
+    padding: 15px;
+}
+
+.table {
+    font-size: 12px;
+}
+
+.table--full {
+    width: 100%;
+}
+
+.table th {
+    font-weight: bold;
+    text-align: center;
+}
+
+.table td:first-child {
+    font-weight: bold;
+    padding-right: 5px;
+    width: 50px;
+}
+
+.table input {
+    width: 100%;
+    border-radius: 4px;
+    border: 2px solid #ccc;
+    padding: 0;
+    line-height: normal;
+    height: 30px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.table input[readonly] {
+    background: transparent;
+    border: 2px dashed #e5e5e5;
+}
+
+.fieldContainer {
+    padding: 5px;
+}
+
+/* FORM */
+.waterfallData td:nth-child(2) input[readonly],
+.waterfallData td:last-child input[readonly]
+{
+    background: #e7e7e7;
+    border: none;
+}
+
+
+/* CHART */
+.waterfallChart__bar {
+    fill: #ccc;
+    shape-rendering: crispEdges;
+}
+.waterfallChart__bar:first-of-type {
+    fill: #003a5d;
+}
+.waterfallChart__bar:last-of-type {
+    fill: #fbb829;
+}
+
+.waterfallChart__barLabel {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.waterfallChart__axis path,
+.waterfallChart__axis line {
+    fill: none;
+    shape-rendering: crispEdges;
+}
+
+.waterfallChart__targetGmLine {
+    fill: #F02D52;
+}
