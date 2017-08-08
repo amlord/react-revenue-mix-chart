@@ -43,7 +43,7 @@ export const INITIAL_STATE = {
       cogs: 148697
     },{
       name: 'PROMOTIONAL',
-      displayName: 'Promo',
+      displayName: 'Promotional',
       revenue: 9032,
       cogs: 8619
     }
@@ -207,10 +207,6 @@ function calcRevenueMixChartValues( data )
     return 0;
   });
 
-console.log({
-    data: chartValues,
-    totals: TOTAL
-  });
   return {
     data: chartValues,
     totals: TOTAL

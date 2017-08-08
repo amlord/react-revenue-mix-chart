@@ -102,9 +102,13 @@ class revenueChart extends React.Component
             .data( pie(data) )
             .enter()
                 .append("g")
-                .classed("revenueChart__arc", true)
-                .on("mouseover", function(d,i){console.log("OVER: " + d.data.name);})
-                .on("mouseout", function(d,i){console.log("OUT: " + d.data.name);});;
+                .attr("class", d => { return "revenueChart__arc revenueChart__arc--" + d.data.name.toLowerCase() })
+                .on("mouseover", function(d,i){
+                    d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","orange");
+                })
+                .on("mouseout", function(d,i){
+                    d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill", color(i));
+                });
 
         arc.append("path")
             .attr("d", path)
