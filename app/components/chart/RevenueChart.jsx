@@ -56,16 +56,19 @@ class revenueChart extends React.Component
         });
 
         // calculate height & width (using golden ratio)
-        let width = document.querySelector('.revenueChart').offsetWidth;
-        let height = width / goldenRatio;
-        let margin = {
+        const width = document.querySelector('.revenueChart').offsetWidth,
+            height = width / goldenRatio;
+        const margin = {
             top: 30,
             bottom: 30,
             left: 30,
             right: 30
         };
-        let innerWidth = width - margin.left - margin.right;
-        let innerHeight = height - margin.top - margin.bottom;
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.top - margin.bottom;
+        const radius = Math.min(innerWidth, innerHeight) / 2;
+
+        const color = d3.scaleOrdinal(["#e1f3fb", "#b6e2f5", "#7dcbec", "#52b9e6", "#0092cc"]);
 
         d3.select(".revenueChart svg").remove();
 
@@ -75,53 +78,44 @@ class revenueChart extends React.Component
 
         let pieBg = svg.append("circle")
                         .classed("revenueChart__pieBg", true)
-                        .attr("cx", ( width / 2 ) )
-                        .attr("cy", ( height / 2 ) )
-                        .attr("r", ( innerHeight / 2 ) );
+                        .attr("cx", width / 2 )
+                        .attr("cy", height / 2 )
+                        .attr("r", radius );
         
         let chart = svg.append("g")
-                        .classed("revenueChart__arcs", true);
+                        .classed("revenueChart__arcs", true)
+                        .attr("transform", "translate(" + ( width / 2 ) + "," + ( height / 2 ) + ")");
         
         let pieFg = svg.append("g")
                         .classed("revenueChart__pieFg", true);
 
-        // // add bars to the chart
-        // chart.selectAll(".revenueChart__bar")
-        //     .data(data)
-        //     .enter()
-        //         .append("rect")
-        //         .classed("revenueChart__bar", true)
-        //         .attr("x", (d, i) =>
-        //         {
-        //             return x(d.name) + ( x.bandwidth() * 0.125 );
-        //         })
-        //         .attr("y", (d, i) =>
-        //         {
-        //             yPos.push( parseFloat(d.value) );
+        let pie = d3.pie()
+            .sort(null)
+            .value(d => { return d.revenue; });
 
-        //             // first & last bars
-        //             if(i === 0 || i === ( data.length - 1 ) )
-        //             {
-        //                 return y(d.value);
-        //             }
+        let path = d3.arc()
+            .outerRadius( radius )
+            .innerRadius(0);
 
-        //             /* bars 'eroding' first bar value (+ve / -ve 
-        //                depending on cumalative GM% effect) */
-        //             return ( data[i].gmPercent > data[i-1].gmPercent ) ?
-        //                 y( parseFloat(data[i].gmPercent) ) :
-        //                 y( parseFloat(data[i-1].gmPercent) );
-        //         })
-        //         .attr("width", x.bandwidth() - ( x.bandwidth() * 0.25 ) )
-        //         .attr("height", (d, i) =>
-        //         {
-        //             return  innerHeight - y(Math.abs(d.value));
-        //         });
+        // add pie arcs to the chart
+        let arc = chart.selectAll(".revenueChart__arc")
+            .data( pie(data) )
+            .enter()
+                .append("g")
+                .classed("revenueChart__arc", true)
+                .on("mouseover", function(d,i){console.log("OVER: " + d.data.name);})
+                .on("mouseout", function(d,i){console.log("OUT: " + d.data.name);});;
+
+        arc.append("path")
+            .attr("d", path)
+            .attr("fill", d => { return color(d.index); });
         
+        // add foreground data circle
         pieFg.append("circle")
             .classed("revenueChart__pieFg", true)
-            .attr("cx", ( width / 2 ) )
-            .attr("cy", ( height / 2 ) )
-            .attr("r", ( innerHeight / 2 ) * 0.6228813559322034 );
+            .attr("cx", width / 2 )
+            .attr("cy", height / 2 )
+            .attr("r", radius / goldenRatio );
     }
 
     render()
