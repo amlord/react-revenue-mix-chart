@@ -169,9 +169,8 @@ export function gmRevenueMixApp( state = initialState, action )
 
   return Object.assign( {}, state, {
     data: data,
-    revenueMix: calcRevenueMixChartValues( data ),
     industryData: industryData,
-    industryRevenueMix: calcRevenueMixChartValues( industryData )
+    revenueMix: calcRevenueMixChartValues( data, industryData )
   } );
 }
 
@@ -241,7 +240,7 @@ function calcGmPercent( data, rowId )
   return parseFloat(Math.round(gmPercent * 100) / 100).toFixed(1);
 }
 
-function calcRevenueMixChartValues( data )
+function calcRevenueMixChartValues( data, industryData )
 {
   let chartValues = [],
       activeData = data.slice();
@@ -253,12 +252,14 @@ function calcRevenueMixChartValues( data )
   for (var i = 0; i < activeData.length; i++)
   {
     let revenuePercent = ( activeData[i].revenue / TOTAL.revenue ) * 100;
+    let industryRevenuePercent = ( activeData[i].revenue / TOTAL.revenue ) * 100;
 
     // add chart data to the array
     chartValues.push({
       name: activeData[i].displayName,
       gmPercent: activeData[i].gmPercent,
       revenue: activeData[i].revenue,
+      industryRevenue: industryData[i].revenue,
       revenuePercent: revenuePercent.toFixed(1)
     });
   }

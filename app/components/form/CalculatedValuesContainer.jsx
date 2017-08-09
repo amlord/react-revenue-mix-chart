@@ -7,8 +7,7 @@ let CalculatedValues = require('./CalculatedValues.jsx');
 const mapStateToProps = state =>
 {
   return {
-    revenueMix: state.revenueMix.data,
-    industryRevenueMix: state.industryRevenueMix.data
+    revenueMix: state.revenueMix.data
   }
 }
 

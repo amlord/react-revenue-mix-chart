@@ -132,3 +132,15 @@ body {
 .revenueChart__targetPieBg {
     fill: #f2f2f2;
 }
+  
+.revenueChart__targetArc {
+    display: none;
+}
+
+.revenueChart__targetArc--visible {
+    display: block;
+}   
+
+.revenueChart__targetArc path {
+    fill: #0092cc;
+}
