@@ -155,7 +155,7 @@ class revenueChart extends React.Component
             .innerRadius(0);
 
         let industryPieData = targetPie( data );
-console.log(industryPieData);
+
         let targetArc = targetChart.selectAll(".revenueChart__targetArc")
             .data( industryPieData.map( (d,i) =>
             {
@@ -177,12 +177,33 @@ console.log(industryPieData);
             .classed("revenueChart__targetLineEnd", true)
             .attr("x1", 0)
             .attr("y1", 0)
-            .attr("x2", d => {
-                console.log( d.data.name, Math.sin(d.endAngle) );
-                return (targetRadius + 5) * Math.sin(d.endAngle);
+            .attr("x2", d => { return (targetRadius + 5) * Math.sin(d.endAngle); })
+            .attr("y2", d => { return (targetRadius + 5) * Math.cos(d.endAngle) * -1; });
+
+        targetArc.append("text")
+            .classed("revenueChart__industryAverageText", true)
+            .text( d => { return "Industry average: " + d.data.industryRevenuePercent + "%"; } )
+            .attr("x", function(d) {
+                const width = this.getBBox().width;
+                const targetTickEnd = (targetRadius + 5) * Math.sin(d.endAngle);
+
+                if( Math.sin(d.endAngle) < 0 )
+                {
+                    return targetTickEnd - width;
+                }
+   
+                return targetTickEnd;
             })
-            .attr("y2", d => {
-                return (targetRadius + 5) * Math.cos(d.endAngle) * -1;
+            .attr("y", function(d) {
+                const height = this.getBBox().height;
+                const targetTickEnd = (targetRadius + 5) * Math.cos(d.endAngle) * -1;
+
+                if( Math.cos(d.endAngle) < 0 )
+                {
+                    return targetTickEnd + height;
+                }
+                
+                return targetTickEnd - (height / 2);
             });
 
         // add foreground data circle

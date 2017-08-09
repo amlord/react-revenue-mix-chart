@@ -151,3 +151,8 @@ body {
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
+
+.revenueChart__industryAverageText {
+    fill: #0092cc;
+    font-size: 10px;
+}
