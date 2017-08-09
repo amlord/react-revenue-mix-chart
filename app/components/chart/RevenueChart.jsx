@@ -144,7 +144,7 @@ class revenueChart extends React.Component
         arc.append("path")
             .attr("d", path)
             .attr("fill", d => { return color(d.index); });
-        console.log(data);
+
         // add industry average target pie arcs to the chart
         let targetPie = d3.pie()
             .sort(null)

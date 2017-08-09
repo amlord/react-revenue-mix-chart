@@ -247,7 +247,7 @@ function calcRevenueMixChartValues( data, industryData )
 
   // remove totals
   const TOTAL = activeData.splice( activeData.length - 1, 1 )[0];
-console.log(industryData);
+
   // create the revenue mix chart data
   for (var i = 0; i < activeData.length; i++)
   {
