@@ -7,7 +7,8 @@ let RevenueChart = require('./RevenueChart.jsx');
 const mapStateToProps = state =>
 {
   return {
-    revenueMix: state.revenueMix
+    revenueMix: state.revenueMix,
+    industryRevenueMix: state.industryRevenueMix
   }
 }
 

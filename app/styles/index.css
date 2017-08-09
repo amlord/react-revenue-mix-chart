@@ -128,3 +128,7 @@ body {
 .revenueChart__arc path {
     shape-rendering: crispEdges;
 }
+
+.revenueChart__targetPieBg {
+    fill: #f2f2f2;
+}

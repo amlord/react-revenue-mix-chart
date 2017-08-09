@@ -8,7 +8,8 @@ class revenueChart extends React.Component
         super(props);
 
         this.state = {
-            revenueMix: props.revenueMix
+            revenueMix: props.revenueMix,
+            industryRevenueMix: props.industryRevenueMix
         };
 
         this.drawRevenueChart = this.drawRevenueChart.bind(this);
@@ -22,12 +23,19 @@ class revenueChart extends React.Component
 
     componentWillReceiveProps( nextProps )
     {
-        let { revenueMix } = this.state;
+        let { revenueMix, industryRevenueMix } = this.state;
 
         if( nextProps.revenueMix !== revenueMix )
         {
             this.setState({
                 revenueMix: nextProps.revenueMix
+            });
+        }
+
+        if( nextProps.industryRevenueMix !== industryRevenueMix )
+        {
+            this.setState({
+                industryRevenueMix: nextProps.industryRevenueMix
             });
         }
     }
@@ -49,6 +57,7 @@ class revenueChart extends React.Component
     {
         const data = this.state.revenueMix.data,
             totals = this.state.revenueMix.totals,
+            industryData = this.state.industryRevenueMix.data,
             goldenRatio = 1.61803398875;
 
         // get min & max data values
@@ -67,7 +76,10 @@ class revenueChart extends React.Component
         };
         const innerWidth = width - margin.left - margin.right;
         const innerHeight = height - margin.top - margin.bottom;
-        const radius = Math.min(innerWidth, innerHeight) / 2;
+
+        const targetRadiusGap = 12;
+        const targetRadius = ( Math.min(innerWidth, innerHeight) / 2 );
+        const radius = targetRadius - targetRadiusGap;
 
         const color = d3.scaleOrdinal(["#e1f3fb", "#b6e2f5", "#7dcbec", "#52b9e6", "#0092cc"]);
 
@@ -83,6 +95,16 @@ class revenueChart extends React.Component
                         .attr("cy", height / 2 )
                         .attr("r", radius );
         
+        let targetChart = svg.append("g")
+                        .classed("revenueChart__targetArcs", true)
+                        .attr("transform", "translate(" + ( width / 2 ) + "," + ( height / 2 ) + ")");
+
+        let targetPieBg = svg.append("circle")
+                        .classed("revenueChart__targetPieBg", true)
+                        .attr("cx", width / 2 )
+                        .attr("cy", height / 2 )
+                        .attr("r", targetRadius - ( targetRadiusGap / 2 ) );
+        
         let chart = svg.append("g")
                         .classed("revenueChart__arcs", true)
                         .attr("transform", "translate(" + ( width / 2 ) + "," + ( height / 2 ) + ")");
@@ -94,13 +116,15 @@ class revenueChart extends React.Component
             .sort(null)
             .value(d => { return d.revenue; });
 
+        // add pie arcs to the chart
         let path = d3.arc()
             .outerRadius( radius )
             .innerRadius(0);
 
-        // add pie arcs to the chart
+        let dealerPieData = pie( data );
+
         let arc = chart.selectAll(".revenueChart__arc")
-            .data( pie(data) )
+            .data( dealerPieData )
             .enter()
                 .append("g")
                 .attr("class", d => { return "revenueChart__arc revenueChart__arc--" + d.data.name.toLowerCase() })
@@ -111,9 +135,6 @@ class revenueChart extends React.Component
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( d.data.revenue ) );
                     d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( d.data.gmPercent ) );
                     d3.select(".revenueChartLabel__gmPercent").text( formatGM( d.data.gmPercent ) );
-
-                    
-                    
                 })
                 .on("mouseout", function(d,i){
                     d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
@@ -125,6 +146,23 @@ class revenueChart extends React.Component
 
         arc.append("path")
             .attr("d", path)
+            .attr("fill", d => { return color(d.index); });
+        
+        // add industry average target pie arcs to the chart
+        let targetPath = d3.arc()
+            .outerRadius( targetRadius )
+            .innerRadius(0);
+
+        let industryPieData = pie( industryData );
+console.log( dealerPieData, industryPieData );
+        let targetArc = targetChart.selectAll(".revenueChart__targetArc")
+            .data( industryPieData )
+            .enter()
+                .append("g")
+                .attr("class", d => { return "revenueChart__targetArc revenueChart__targetArc--" + d.data.name.toLowerCase() });
+
+        targetArc.append("path")
+            .attr("d", targetPath)
             .attr("fill", d => { return color(d.index); });
         
         // add foreground data circle
