@@ -247,20 +247,21 @@ function calcRevenueMixChartValues( data, industryData )
 
   // remove totals
   const TOTAL = activeData.splice( activeData.length - 1, 1 )[0];
-
+console.log(industryData);
   // create the revenue mix chart data
   for (var i = 0; i < activeData.length; i++)
   {
     let revenuePercent = ( activeData[i].revenue / TOTAL.revenue ) * 100;
-    let industryRevenuePercent = ( activeData[i].revenue / TOTAL.revenue ) * 100;
+    let industryRevenuePercent = ( industryData[i].revenue / industryData[industryData.length-1].revenue ) * 100;
 
     // add chart data to the array
     chartValues.push({
       name: activeData[i].displayName,
       gmPercent: activeData[i].gmPercent,
       revenue: activeData[i].revenue,
+      revenuePercent: revenuePercent.toFixed(1),
       industryRevenue: industryData[i].revenue,
-      revenuePercent: revenuePercent.toFixed(1)
+      industryRevenuePercent: industryRevenuePercent.toFixed(1)
     });
   }
 
