@@ -8,18 +8,26 @@ class CalculatedValues extends React.Component
         super(props);
 
         this.state = {
-            revenueMix: props.revenueMix
+            revenueMix: props.revenueMix,
+            industryRevenueMix: props.industryRevenueMix
         };
     }
 
     componentWillReceiveProps( nextProps )
     {
-        let { revenueMix } = this.state;
+        let { revenueMix, industryRevenueMix } = this.state;
 
         if( nextProps.revenueMix !== revenueMix )
         {
             this.setState({
                 revenueMix: nextProps.revenueMix
+            });
+        }
+
+        if( nextProps.industryRevenueMix !== industryRevenueMix )
+        {
+            this.setState({
+                industryRevenueMix: nextProps.industryRevenueMix
             });
         }
     }
@@ -48,8 +56,20 @@ class CalculatedValues extends React.Component
                         </thead>
                         <tbody>
                             <tr className="revenueData">
-                                <td>Value</td>
+                                <td>Mix %ge</td>
                                 {this.state.revenueMix.map((cell, index) => {
+                                    return (
+                                        <CalculatedValuesCell 
+                                            index={index}
+                                            value={cell.revenuePercent}
+                                            key={index}
+                                        />
+                                    )
+                                })}
+                            </tr>
+                            <tr className="revenueData">
+                                <td>Average</td>
+                                {this.state.industryRevenueMix.map((cell, index) => {
                                     return (
                                         <CalculatedValuesCell 
                                             index={index}

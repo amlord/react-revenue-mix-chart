@@ -16,7 +16,17 @@ const {
   SET_DISCOUNT_COGS,
   SET_SEGMENTED_COGS,
   SET_CONTRACT_COGS,
-  SET_PROMOTIONAL_COGS
+  SET_PROMOTIONAL_COGS,
+  SET_INDUSTRY_STANDARD_REVENUE,
+  SET_INDUSTRY_DISCOUNT_REVENUE,
+  SET_INDUSTRY_SEGMENTED_REVENUE,
+  SET_INDUSTRY_CONTRACT_REVENUE,
+  SET_INDUSTRY_PROMOTIONAL_REVENUE,
+  SET_INDUSTRY_STANDARD_COGS,
+  SET_INDUSTRY_DISCOUNT_COGS,
+  SET_INDUSTRY_SEGMENTED_COGS,
+  SET_INDUSTRY_CONTRACT_COGS,
+  SET_INDUSTRY_PROMOTIONAL_COGS
 } = require('./actions');
 
 export const INITIAL_STATE = {
@@ -47,58 +57,121 @@ export const INITIAL_STATE = {
       revenue: 9032,
       cogs: 8619
     }
+  ],
+  industryData: [
+    {
+      name: 'STANDARD',
+      displayName: 'Standard',
+      revenue: 3892347,
+      cogs: 1969636
+    },{
+      name: 'DISCOUNT',
+      displayName: 'Discount',
+      revenue: 2311451,
+      cogs: 1518352
+    },{
+      name: 'SEGMENTED',
+      displayName: 'Segmented',
+      revenue: 264930,
+      cogs: 153170
+    },{
+      name: 'CONTRACT',
+      displayName: 'Contract',
+      revenue: 1659665,
+      cogs: 1102715
+    },{
+      name: 'PROMOTIONAL',
+      displayName: 'Promotional',
+      revenue: 91053,
+      cogs: 70113
+    }
   ]
 };
 
 /* REDUCERS */
 export function gmRevenueMixApp( state = initialState, action )
 {
-  let data;
+  let data = state.data,
+      industryData = state.industryData;
 
   switch( action.type )
   {
+    // initialisation
     case INIT:
       data = initData( state.data );
+      industryData = initData( state.industryData );
       break;
+    
+    // dealer actions
     case SET_STANDARD_REVENUE:
-      data = setDataRevenue( state, STANDARD, action.revenue );
+      data = setDataRevenue( data, STANDARD, action.revenue );
       break;
     case SET_DISCOUNT_REVENUE:
-      data = setDataRevenue( state, DISCOUNT, action.revenue );
+      data = setDataRevenue( data, DISCOUNT, action.revenue );
       break;
     case SET_SEGMENTED_REVENUE:
-      data = setDataRevenue( state, SEGMENTED, action.revenue );
+      data = setDataRevenue( data, SEGMENTED, action.revenue );
       break;
     case SET_CONTRACT_REVENUE:
-      data = setDataRevenue( state, CONTRACT, action.revenue );
+      data = setDataRevenue( data, CONTRACT, action.revenue );
       break;
     case SET_PROMOTIONAL_REVENUE:
-      data = setDataRevenue( state, PROMOTIONAL, action.revenue );
+      data = setDataRevenue( data, PROMOTIONAL, action.revenue );
       break;
     case SET_STANDARD_COGS:
-      data = setDataCogs( state, STANDARD, action.cogs );
+      data = setDataCogs( data, STANDARD, action.cogs );
       break;
     case SET_DISCOUNT_COGS:
-      data = setDataCogs( state, DISCOUNT, action.cogs );
+      data = setDataCogs( data, DISCOUNT, action.cogs );
       break;
     case SET_SEGMENTED_COGS:
-      data = setDataCogs( state, SEGMENTED, action.cogs );
+      data = setDataCogs( data, SEGMENTED, action.cogs );
       break;
     case SET_CONTRACT_COGS:
-      data = setDataCogs( state, CONTRACT, action.cogs );
+      data = setDataCogs( data, CONTRACT, action.cogs );
       break;
     case SET_PROMOTIONAL_COGS:
-      data = setDataCogs( state, PROMOTIONAL, action.cogs );
+      data = setDataCogs( data, PROMOTIONAL, action.cogs );
       break;
-    default:
-      data = state.data;
+    
+    // industry actions
+    case SET_INDUSTRY_STANDARD_REVENUE:
+      industryData = setDataRevenue( industryData, STANDARD, action.revenue );
+      break;
+    case SET_INDUSTRY_DISCOUNT_REVENUE:
+      industryData = setDataRevenue( industryData, DISCOUNT, action.revenue );
+      break;
+    case SET_INDUSTRY_SEGMENTED_REVENUE:
+      industryData = setDataRevenue( industryData, SEGMENTED, action.revenue );
+      break;
+    case SET_INDUSTRY_CONTRACT_REVENUE:
+      industryData = setDataRevenue( industryData, CONTRACT, action.revenue );
+      break;
+    case SET_INDUSTRY_PROMOTIONAL_REVENUE:
+      industryData = setDataRevenue( industryData, PROMOTIONAL, action.revenue );
+      break;
+    case SET_INDUSTRY_STANDARD_COGS:
+      industryData = setDataCogs( industryData, STANDARD, action.cogs );
+      break;
+    case SET_INDUSTRY_DISCOUNT_COGS:
+      industryData = setDataCogs( industryData, DISCOUNT, action.cogs );
+      break;
+    case SET_INDUSTRY_SEGMENTED_COGS:
+      industryData = setDataCogs( industryData, SEGMENTED, action.cogs );
+      break;
+    case SET_INDUSTRY_CONTRACT_COGS:
+      industryData = setDataCogs( industryData, CONTRACT, action.cogs );
+      break;
+    case SET_INDUSTRY_PROMOTIONAL_COGS:
+      industryData = setDataCogs( industryData, PROMOTIONAL, action.cogs );
+      break;
   }
-
-  let revenueMix = calcRevenueMixChartValues(data);
 
   return Object.assign( {}, state, {
     data: data,
-    revenueMix: revenueMix
+    revenueMix: calcRevenueMixChartValues( data ),
+    industryData: industryData,
+    industryRevenueMix: calcRevenueMixChartValues( industryData )
   } );
 }
 
@@ -112,7 +185,8 @@ function initData( data )
   data[PROMOTIONAL].gmPercent = calcGmPercent( data, PROMOTIONAL);
 
   data[TOTAL] = {
-    name: "Total",
+    name: "TOTAL",
+    displayName: "Total",
     revenue: calcDataTotalRevenue( data ),
     cogs: calcDataTotalCogs( data )
   };
@@ -122,10 +196,8 @@ function initData( data )
   return data
 }
 
-function setDataRevenue( state, dataId, revenue )
+function setDataRevenue( data, dataId, revenue )
 {
-  let data = state.data;
-
   data[dataId].revenue = parseInt( revenue );
   data[dataId].gmPercent = calcGmPercent( data, dataId );
 
@@ -135,10 +207,8 @@ function setDataRevenue( state, dataId, revenue )
   return data;
 }
 
-function setDataCogs( state, dataId, cogs )
+function setDataCogs( data, dataId, cogs )
 {
-  let data = state.data;
-  
   data[dataId].cogs = parseInt( cogs );
   data[dataId].gmPercent = calcGmPercent( data, dataId );
 

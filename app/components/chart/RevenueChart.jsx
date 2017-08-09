@@ -109,12 +109,17 @@ class revenueChart extends React.Component
                     d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","#666");
                     d3.select(".revenueChartLabel__type").text( d.data.name );
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( d.data.revenue ) );
+                    d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( d.data.gmPercent ) );
                     d3.select(".revenueChartLabel__gmPercent").text( formatGM( d.data.gmPercent ) );
+
+                    
+                    
                 })
                 .on("mouseout", function(d,i){
                     d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
-                    d3.select(".revenueChartLabel__type").text( totals.name );
+                    d3.select(".revenueChartLabel__type").text( totals.displayName );
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( totals.revenue ) );
+                    d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( totals.gmPercent ) );
                     d3.select(".revenueChartLabel__gmPercent").text( formatGM( totals.gmPercent ) );
                 });
 
@@ -132,7 +137,7 @@ class revenueChart extends React.Component
         // revenue type label
         pieFg.append("text")
             .classed("revenueChartLabel__type", true)
-            .text( totals.name )
+            .text( totals.displayName )
             .attr("dx", width / 2 )
             .attr("dy", ( height / 2 ) - 33 );
 
@@ -157,7 +162,7 @@ class revenueChart extends React.Component
             .attr("y", ( height / 2 ) + 11 )
             .attr("rx", 4 )
             .attr("ry", 4 )
-            .attr("fill", "#666");
+            .attr("fill", gmPercentColour( totals.gmPercent ) );
 
         // gm percent text
         pieFg.append("text")
@@ -176,6 +181,23 @@ class revenueChart extends React.Component
         function formatGM( amount )
         {
             return amount + "% GM";
+        }
+
+        // function to format GM% colour consistently
+        function gmPercentColour( gmPercent )
+        {
+            if( gmPercent > 30 && gmPercent < 40 )
+            {
+                return "#2dd00b";
+            }
+
+            if( ( gmPercent > 25 && gmPercent <= 30 ) ||
+                ( gmPercent >= 40 && gmPercent < 45 ) )
+            {
+                return "#fbb829";
+            }
+
+            return "#f02d52";
         }
     }
 

@@ -123,3 +123,8 @@ body {
     font-size: 13px;
     font-weight: bold;
 }
+
+.revenueChartLabel__gmBg,
+.revenueChart__arc path {
+    shape-rendering: crispEdges;
+}

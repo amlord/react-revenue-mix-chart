@@ -27,7 +27,9 @@ class GmErosionForm extends React.Component
             gmpSegmented: props.gmpSegmented,
             gmpContract: props.gmpContract,
             gmpPromotional: props.gmpPromotional,
-            gmpTotal: props.gmpTotal
+            gmpTotal: props.gmpTotal,
+
+            subTitle: props.subTitle
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -173,7 +175,7 @@ class GmErosionForm extends React.Component
         return (
             <div className="panel">
                 <header className="panelHeader panelHeader--info">
-                    <h1>Revenue &amp; Cost of Goods</h1>
+                    <h1>Revenue &amp; Cost of Goods <small>({this.state.subTitle})</small></h1>
                 </header>
                 <div className="panelBody">
                     <form>

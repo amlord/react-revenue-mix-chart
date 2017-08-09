@@ -3,6 +3,7 @@ let { connect } = require('react-redux');
 
 // user-defined app components
 let RevenueFormContainer = require('./form/RevenueFormContainer.jsx');
+let IndustryRevenueFormContainer = require('./form/IndustryRevenueFormContainer.jsx');
 let CalculatedValuesContainer = require('./form/CalculatedValuesContainer.jsx');
 let RevenueChartChartContainer = require('./chart/RevenueChartContainer.jsx');
 
@@ -15,6 +16,7 @@ class RevenueMix extends React.Component
                 <RevenueChartChartContainer />
                 <CalculatedValuesContainer />
                 <RevenueFormContainer />
+                <IndustryRevenueFormContainer />
             </div>
         );
     }

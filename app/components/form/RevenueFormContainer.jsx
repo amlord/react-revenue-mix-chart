@@ -39,7 +39,9 @@ const mapStateToProps = state =>
     gmpSegmented: state.data[SEGMENTED].gmPercent,
     gmpContract: state.data[CONTRACT].gmPercent,
     gmpPromotional: state.data[PROMOTIONAL].gmPercent,
-    gmpTotal: state.data[TOTAL].gmPercent
+    gmpTotal: state.data[TOTAL].gmPercent,
+
+    subTitle: "Dealer Data"
   }
 }
 
