@@ -112,7 +112,7 @@ function initData( data )
   data[PROMOTIONAL].gmPercent = calcGmPercent( data, PROMOTIONAL);
 
   data[TOTAL] = {
-    name: "TOTAL",
+    name: "Total",
     revenue: calcDataTotalRevenue( data ),
     cogs: calcDataTotalCogs( data )
   };
@@ -152,7 +152,7 @@ function calcDataTotalRevenue( data )
 {
   return data.reduce((sum, value) =>
   {
-    return ( value.name !== "TOTAL" ) ? ( sum + value.revenue ) : sum;
+    return ( value.name.toUpperCase() !== "TOTAL" ) ? ( sum + value.revenue ) : sum;
   }, 0);
 }
 
@@ -160,7 +160,7 @@ function calcDataTotalCogs( data )
 {
   return data.reduce((sum, value) =>
   {
-    return (value.name !== "TOTAL") ? (sum + value.cogs) : sum;
+    return (value.name.toUpperCase() !== "TOTAL") ? (sum + value.cogs) : sum;
   }, 0);
 }
 

@@ -48,6 +48,7 @@ class revenueChart extends React.Component
     drawRevenueChart()
     {
         const data = this.state.revenueMix.data,
+            totals = this.state.revenueMix.totals,
             goldenRatio = 1.61803398875;
 
         // get min & max data values
@@ -104,10 +105,17 @@ class revenueChart extends React.Component
                 .append("g")
                 .attr("class", d => { return "revenueChart__arc revenueChart__arc--" + d.data.name.toLowerCase() })
                 .on("mouseover", function(d,i){
-                    d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","orange");
+                    d3.selectAll(".revenueChart__arc path").attr("fill","#e5e5e5");
+                    d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","#666");
+                    d3.select(".revenueChartLabel__type").text( d.data.name );
+                    d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( d.data.revenue ) );
+                    d3.select(".revenueChartLabel__gmPercent").text( formatGM( d.data.gmPercent ) );
                 })
                 .on("mouseout", function(d,i){
-                    d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill", color(i));
+                    d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
+                    d3.select(".revenueChartLabel__type").text( totals.name );
+                    d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( totals.revenue ) );
+                    d3.select(".revenueChartLabel__gmPercent").text( formatGM( totals.gmPercent ) );
                 });
 
         arc.append("path")
@@ -120,6 +128,55 @@ class revenueChart extends React.Component
             .attr("cx", width / 2 )
             .attr("cy", height / 2 )
             .attr("r", radius / goldenRatio );
+
+        // revenue type label
+        pieFg.append("text")
+            .classed("revenueChartLabel__type", true)
+            .text( totals.name )
+            .attr("dx", width / 2 )
+            .attr("dy", ( height / 2 ) - 33 );
+
+        // revenue value
+        pieFg.append("text")
+            .classed("revenueChartLabel__revenueValue", true)
+            .text( formatCurrency( totals.revenue ) )
+            .attr("dx", width / 2 )
+            .attr("dy", ( height / 2 ) - 8 );
+
+        let gmPercentPanel = {
+            height: 30,
+            width: 80
+        };
+
+        // gm percent text background
+        pieFg.append("rect")
+            .classed("revenueChartLabel__gmBg", true)
+            .attr("height", gmPercentPanel.height )
+            .attr("width", gmPercentPanel.width )
+            .attr("x", ( width / 2 ) - ( gmPercentPanel.width / 2 ) )
+            .attr("y", ( height / 2 ) + 11 )
+            .attr("rx", 4 )
+            .attr("ry", 4 )
+            .attr("fill", "#666");
+
+        // gm percent text
+        pieFg.append("text")
+            .classed("revenueChartLabel__gmPercent", true)
+            .text( formatGM( totals.gmPercent ) )
+            .attr("dx", width / 2 )
+            .attr("dy", ( height / 2 ) + 30 );
+
+        // function to format revenue value consistently
+        function formatCurrency( amount )
+        {
+            return "£" + amount.format(0, 3, ',', '.');
+        }
+
+        // function to format GM% value consistently
+        function formatGM( amount )
+        {
+            return amount + "% GM";
+        }
     }
 
     render()
@@ -136,5 +193,13 @@ class revenueChart extends React.Component
         );
     }
 }
+
+Number.prototype.format = function(n, x, s, c)
+{
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(Math.max(0, ~~n));
+    
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
 
 module.exports = revenueChart;

@@ -105,3 +105,21 @@ body {
 .revenueChart__pieFg {
     fill: #fff;
 }
+
+.revenueChartLabel__type,
+.revenueChartLabel__revenueValue {
+    fill: #333;
+    font-size: 12px;
+    text-anchor: middle;
+}
+
+.revenueChartLabel__revenueValue {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.revenueChartLabel__gmPercent {
+    text-anchor: middle;
+    font-size: 13px;
+    font-weight: bold;
+}
