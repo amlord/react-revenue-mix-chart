@@ -143,4 +143,11 @@ body {
 
 .revenueChart__targetArc path {
     fill: #0092cc;
+    shape-rendering: crispEdges;
+}
+
+.revenueChart__targetLineEnd {
+    stroke: #0092cc;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
 }

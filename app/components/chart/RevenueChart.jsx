@@ -155,7 +155,7 @@ class revenueChart extends React.Component
             .innerRadius(0);
 
         let industryPieData = targetPie( data );
-
+console.log(industryPieData);
         let targetArc = targetChart.selectAll(".revenueChart__targetArc")
             .data( industryPieData.map( (d,i) =>
             {
@@ -172,7 +172,19 @@ class revenueChart extends React.Component
 
         targetArc.append("path")
             .attr("d", targetPath);
-        
+
+        targetArc.append("line")
+            .classed("revenueChart__targetLineEnd", true)
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", d => {
+                console.log( d.data.name, Math.sin(d.endAngle) );
+                return (targetRadius + 5) * Math.sin(d.endAngle);
+            })
+            .attr("y2", d => {
+                return (targetRadius + 5) * Math.cos(d.endAngle) * -1;
+            });
+
         // add foreground data circle
         pieFg.append("circle")
             .classed("revenueChart__pieFg", true)
