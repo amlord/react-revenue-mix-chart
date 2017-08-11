@@ -98,6 +98,10 @@ body {
 
 
 /* CHART */
+.revenueChart__canvas {
+    display: block;
+}
+
 .revenueChart__pieBg {
     fill: #e5e5e5;
 }
@@ -155,4 +159,24 @@ body {
 .revenueChart__industryAverageText {
     fill: #0092cc;
     font-size: 10px;
+}
+
+.revenueChart__segmentLabels rect,
+.revenueChart__averageLabel rect {
+    stroke: #ccc;
+    stroke-width: 1px;
+    height: 32px;
+    width: 16px;
+}
+
+.revenueChart__segmentLabelTitleText,
+.revenueChart__segmentLabelRevenueText,
+.revenueChart__averageLabelTitleText,
+.revenueChart__averageLabelRevenueText {
+    dominant-baseline: hanging;
+    font-size: 12px;
+}
+
+.revenueChart__segmentLabelRevenueText {
+    font-weight: bold;
 }

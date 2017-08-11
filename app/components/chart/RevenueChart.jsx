@@ -77,6 +77,7 @@ class revenueChart extends React.Component
         d3.select(".revenueChart svg").remove();
 
         let svg = d3.select(".revenueChart").append("svg")
+                    .classed("revenueChart__canvas", true)
                     .attr("width", width)
                     .attr("height", height);
 
@@ -102,6 +103,13 @@ class revenueChart extends React.Component
         
         let pieFg = svg.append("g")
                         .classed("revenueChart__pieFg", true);
+        
+        let segmentLabels = svg.append("g")
+                        .classed("revenueChart__segmentLabels", true);
+        
+        let averageLabel = svg.append("g")
+                        .classed("revenueChart__averageLabel", true)
+                        .attr("display", "none");
 
         // add pie arcs to the chart
         let pie = d3.pie()
@@ -129,6 +137,12 @@ class revenueChart extends React.Component
 
                     d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
                         .classed("revenueChart__targetArc--visible", true);
+                    
+                    d3.selectAll(".revenueChart__segmentLabels")
+                        .attr("display", "none");
+
+                    d3.selectAll(".revenueChart__averageLabel")
+                        .attr("display", "block");
                 })
                 .on("mouseout", function(d,i){
                     d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
@@ -139,6 +153,12 @@ class revenueChart extends React.Component
 
                     d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
                         .classed("revenueChart__targetArc--visible", false);
+                    
+                    d3.selectAll(".revenueChart__segmentLabels")
+                        .attr("display", "block");
+
+                    d3.selectAll(".revenueChart__averageLabel")
+                        .attr("display", "none");
                 });
 
         arc.append("path")
@@ -182,7 +202,7 @@ class revenueChart extends React.Component
 
         targetArc.append("text")
             .classed("revenueChart__industryAverageText", true)
-            .text( d => { return "Industry average: " + d.data.industryRevenuePercent + "%"; } )
+            .text( d => { return d.data.industryRevenuePercent + "%"; } )
             .attr("x", function(d) {
                 const width = this.getBBox().width;
                 const targetTickEnd = (targetRadius + 5) * Math.sin(d.endAngle);
@@ -249,6 +269,62 @@ class revenueChart extends React.Component
             .text( formatGM( totals.gmPercent ) )
             .attr("dx", width / 2 )
             .attr("dy", ( height / 2 ) + 30 );
+
+        // add pie chart segment labels
+        let segmentLabel = segmentLabels.selectAll(".revenueChart__segmentLabel")
+            .data( dealerPieData )
+            .enter()
+                .append("g")
+                    .classed("revenueChart__segmentLabel", true);
+
+        segmentLabel
+            .append("rect")
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("x", 0)
+            .attr("y", (d,i) => 48 * i )
+            .attr("fill", d => color(d.index) );
+
+        segmentLabel
+            .append("text")
+            .classed("revenueChart__segmentLabelTitleText", true)
+            .text( d => d.data.name )
+            .attr("x", 22)
+            .attr("y", (d,i) => 48 * i )
+            .attr("dy", 3);
+
+        segmentLabel
+            .append("text")
+            .classed("revenueChart__segmentLabelRevenueText", true)
+            .text( d => formatCurrency( d.data.revenue ) )
+            .attr("x", 22)
+            .attr("y", (d,i) => 48 * i )
+            .attr("dy", 20);
+        
+        // add industry average labels
+        averageLabel
+            .append("rect")
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("x", 0)
+            .attr("y", 0 )
+            .attr("fill", color(dealerPieData.length-1) );
+
+        averageLabel
+            .append("text")
+            .classed("revenueChart__averageLabelTitleText", true)
+            .text( "Industry average" )
+            .attr("x", 22)
+            .attr("y", 0 )
+            .attr("dy", 3);
+
+        averageLabel
+            .append("text")
+            .classed("revenueChart__averageLabelRevenueText", true)
+            .text( "Revenue Mix" )
+            .attr("x", 22)
+            .attr("y", 0 )
+            .attr("dy", 20);
 
         // function to format revenue value consistently
         function formatCurrency( amount )
