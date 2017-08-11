@@ -69,9 +69,7 @@ class revenueChart extends React.Component
 
         let svg = d3.select(".revenueChart").append("svg")
                     .classed("revenueChart__canvas", true)
-                    // .attr("width", width)
-                    // .attr("height", height)
-                    //responsive SVG needs these 2 attributes and no width and height attr
+                    // responsive SVG needs these 2 attributes and no width and height attr
                     .attr("preserveAspectRatio", "xMinYMin meet")
                     .attr("viewBox", "0 0 " + width + " " + height);
 
