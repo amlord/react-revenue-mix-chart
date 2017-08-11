@@ -12,12 +12,6 @@ class revenueChart extends React.Component
         };
 
         this.drawRevenueChart = this.drawRevenueChart.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    updateDimensions()
-    {
-        this.drawRevenueChart();
     }
 
     componentWillReceiveProps( nextProps )
@@ -35,9 +29,6 @@ class revenueChart extends React.Component
     componentDidMount()
     {
         this.drawRevenueChart();
-
-        // add an event to redraw the chart on resize
-        window.addEventListener("resize", this.updateDimensions);
     }
 
     componentDidUpdate()
@@ -78,8 +69,11 @@ class revenueChart extends React.Component
 
         let svg = d3.select(".revenueChart").append("svg")
                     .classed("revenueChart__canvas", true)
-                    .attr("width", width)
-                    .attr("height", height);
+                    // .attr("width", width)
+                    // .attr("height", height)
+                    //responsive SVG needs these 2 attributes and no width and height attr
+                    .attr("preserveAspectRatio", "xMinYMin meet")
+                    .attr("viewBox", "0 0 " + width + " " + height);
 
         let pieBg = svg.append("circle")
                         .classed("revenueChart__pieBg", true)
