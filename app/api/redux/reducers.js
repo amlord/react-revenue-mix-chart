@@ -26,7 +26,8 @@ const {
   SET_INDUSTRY_DISCOUNT_COGS,
   SET_INDUSTRY_SEGMENTED_COGS,
   SET_INDUSTRY_CONTRACT_COGS,
-  SET_INDUSTRY_PROMOTIONAL_COGS
+  SET_INDUSTRY_PROMOTIONAL_COGS,
+  SET_TARGET_GM
 } = require('./actions');
 
 export const INITIAL_STATE = {
@@ -85,14 +86,16 @@ export const INITIAL_STATE = {
       revenue: 91053,
       cogs: 70113
     }
-  ]
+  ],
+  target: 43
 };
 
 /* REDUCERS */
 export function gmRevenueMixApp( state = initialState, action )
 {
   let data = state.data,
-      industryData = state.industryData;
+      industryData = state.industryData,
+      target = state.target;
 
   switch( action.type )
   {
@@ -165,12 +168,18 @@ export function gmRevenueMixApp( state = initialState, action )
     case SET_INDUSTRY_PROMOTIONAL_COGS:
       industryData = setDataCogs( industryData, PROMOTIONAL, action.cogs );
       break;
+    
+    // target GM%
+    case SET_TARGET_GM:
+      target = parseFloat(action.target);
+      break;
   }
 
   return Object.assign( {}, state, {
     data: data,
     industryData: industryData,
-    revenueMix: calcRevenueMixChartValues( data, industryData )
+    revenueMix: calcRevenueMixChartValues( data, industryData ),
+    target: target
   } );
 }
 

@@ -35,6 +35,9 @@ export const SET_INDUSTRY_SEGMENTED_COGS = 'SET_INDUSTRY_SEGMENTED_COGS'
 export const SET_INDUSTRY_CONTRACT_COGS = 'SET_INDUSTRY_CONTRACT_COGS'
 export const SET_INDUSTRY_PROMOTIONAL_COGS = 'SET_INDUSTRY_PROMOTIONAL_COGS'
 
+/* target GM action types */
+export const SET_TARGET_GM = 'SET_TARGET_GM'
+
 /* ACTION CREATORS */
 export function loadData(data)
 {
@@ -204,5 +207,14 @@ export function setIndustryPromotionalGmCogs(cogs)
     return {
         type: SET_INDUSTRY_PROMOTIONAL_COGS,
         cogs: cogs
+    }
+}
+
+/* Gross Margin target actions */
+export function setTargetGm(targetGm)
+{
+    return {
+        type: SET_TARGET_GM,
+        target: targetGm
     }
 }

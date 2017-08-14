@@ -8,7 +8,7 @@ const mapStateToProps = state =>
 {
   return {
     revenueMix: state.revenueMix,
-    industryRevenueMix: state.industryRevenueMix
+    target: state.target
   }
 }
 

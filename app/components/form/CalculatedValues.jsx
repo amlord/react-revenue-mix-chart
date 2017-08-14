@@ -8,18 +8,44 @@ class CalculatedValues extends React.Component
         super(props);
 
         this.state = {
-            revenueMix: props.revenueMix
+            revenueMix: props.revenueMix,
+            gmTarget: props.target
         };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange( event )
+    {
+        let value = parseInt( event.target.value );
+        let name = event.target.name;
+
+        if( isNaN( value ) )
+        {
+            value = 0;
+        }
+
+        this.setState(
+            { gmTarget: value },
+            () => { this.props.onTargetGmUpdate( value ); }
+        );
     }
 
     componentWillReceiveProps( nextProps )
     {
-        let { revenueMix } = this.state;
+        let { revenueMix, target } = this.state;
 
         if( nextProps.revenueMix !== revenueMix )
         {
             this.setState({
                 revenueMix: nextProps.revenueMix
+            });
+        }
+
+        if( nextProps.target !== target )
+        {
+            this.setState({
+                gmTarget: nextProps.target
             });
         }
     }
@@ -70,6 +96,21 @@ class CalculatedValues extends React.Component
                                         />
                                     )
                                 })}
+                            </tr>
+                            <tr className="revenueData">
+                                <td>Target GM%</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div className="fieldContainer">
+                                        <input
+                                            name="gmTarget"
+                                            value={this.state.gmTarget}
+                                            onChange={this.handleChange} />
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

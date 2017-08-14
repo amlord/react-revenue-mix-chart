@@ -8,7 +8,8 @@ class revenueChart extends React.Component
         super(props);
 
         this.state = {
-            revenueMix: props.revenueMix
+            revenueMix: props.revenueMix,
+            target: props.target
         };
 
         this.drawRevenueChart = this.drawRevenueChart.bind(this);
@@ -16,12 +17,19 @@ class revenueChart extends React.Component
 
     componentWillReceiveProps( nextProps )
     {
-        let { revenueMix } = this.state;
+        let { revenueMix, target } = this.state;
 
         if( nextProps.revenueMix !== revenueMix )
         {
             this.setState({
                 revenueMix: nextProps.revenueMix
+            });
+        }
+
+        if( nextProps.target !== target )
+        {
+            this.setState({
+                target: nextProps.target
             });
         }
     }
@@ -40,6 +48,7 @@ class revenueChart extends React.Component
     {
         const data = this.state.revenueMix.data,
             totals = this.state.revenueMix.totals,
+            targetGM = this.state.target,
             goldenRatio = 1.61803398875;
 
         // get min & max data values
@@ -99,6 +108,10 @@ class revenueChart extends React.Component
         let segmentLabels = svg.append("g")
                         .classed("revenueChart__segmentLabels", true);
         
+        let activeSegmentLabel = svg.append("g")
+                        .classed("revenueChart__activeSegmentLabel", true)
+                        .attr("display", "none");
+        
         let averageLabel = svg.append("g")
                         .classed("revenueChart__averageLabel", true)
                         .attr("display", "none");
@@ -124,14 +137,28 @@ class revenueChart extends React.Component
                     d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","#666");
                     d3.select(".revenueChartLabel__type").text( d.data.name );
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( d.data.revenue ) );
-                    d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( d.data.gmPercent ) );
-                    d3.select(".revenueChartLabel__gmPercent").text( formatGM( d.data.gmPercent ) );
+                    d3.select(".revenueChartLabel__gmBg").attr( "fill", "#e5e5e5");
+                    d3.select(".revenueChartLabel__gmPercent")
+                        .attr( "fill", "#333")
+                        .text( formatGM( d.data.gmPercent ) );
 
                     d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
                         .classed("revenueChart__targetArc--visible", true);
                     
                     d3.selectAll(".revenueChart__segmentLabels")
                         .attr("display", "none");
+
+                    d3.selectAll(".revenueChart__activeSegmentLabelTitleText")
+                        .text(d.data.name);
+
+                    d3.selectAll(".revenueChart__activeSegmentLabelRevenueText")
+                        .text(d.data.revenuePercent + "%");
+                    
+                    d3.selectAll(".revenueChart__activeSegmentLabel")
+                        .attr("display", "block");
+
+                    d3.selectAll(".revenueChart__averageLabelRevenueText")
+                        .text(d.data.industryRevenuePercent + "%");
 
                     d3.selectAll(".revenueChart__averageLabel")
                         .attr("display", "block");
@@ -140,14 +167,19 @@ class revenueChart extends React.Component
                     d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
                     d3.select(".revenueChartLabel__type").text( totals.displayName );
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( totals.revenue ) );
-                    d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( totals.gmPercent ) );
-                    d3.select(".revenueChartLabel__gmPercent").text( formatGM( totals.gmPercent ) );
+                    d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( totals.gmPercent, targetGM ) );
+                    d3.select(".revenueChartLabel__gmPercent")
+                        .attr( "fill", "#fff")
+                        .text( formatGM( totals.gmPercent ) );
 
                     d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
                         .classed("revenueChart__targetArc--visible", false);
                     
                     d3.selectAll(".revenueChart__segmentLabels")
                         .attr("display", "block");
+
+                    d3.selectAll(".revenueChart__activeSegmentLabel")
+                        .attr("display", "none");
 
                     d3.selectAll(".revenueChart__averageLabel")
                         .attr("display", "none");
@@ -253,7 +285,7 @@ class revenueChart extends React.Component
             .attr("y", ( height / 2 ) + 11 )
             .attr("rx", 4 )
             .attr("ry", 4 )
-            .attr("fill", gmPercentColour( totals.gmPercent ) );
+            .attr("fill", gmPercentColour( totals.gmPercent, targetGM ));
 
         // gm percent text
         pieFg.append("text")
@@ -293,21 +325,45 @@ class revenueChart extends React.Component
             .attr("y", (d,i) => 48 * i )
             .attr("dy", 20);
         
-        // add industry average labels
+        // add industry average label
+        activeSegmentLabel
+            .append("rect")
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("x", 0)
+            .attr("y", 0);
+
+        activeSegmentLabel
+            .append("text")
+            .classed("revenueChart__activeSegmentLabelTitleText", true)
+            .text( "Industry average" )
+            .attr("x", 22)
+            .attr("y", 0 )
+            .attr("dy", 3);
+
+        activeSegmentLabel
+            .append("text")
+            .classed("revenueChart__activeSegmentLabelRevenueText", true)
+            .text( "Revenue Mix" )
+            .attr("x", 22)
+            .attr("y", 0 )
+            .attr("dy", 20);
+        
+        // add industry average label
         averageLabel
             .append("rect")
             .attr("rx", 4)
             .attr("ry", 4)
             .attr("x", 0)
-            .attr("y", 0 )
-            .attr("fill", color(dealerPieData.length-1) );
+            .attr("y", 48 )
+            .attr("fill", color(dealerPieData.length - 1) );
 
         averageLabel
             .append("text")
             .classed("revenueChart__averageLabelTitleText", true)
             .text( "Industry average" )
             .attr("x", 22)
-            .attr("y", 0 )
+            .attr("y", 48 )
             .attr("dy", 3);
 
         averageLabel
@@ -315,7 +371,7 @@ class revenueChart extends React.Component
             .classed("revenueChart__averageLabelRevenueText", true)
             .text( "Revenue Mix" )
             .attr("x", 22)
-            .attr("y", 0 )
+            .attr("y", 48 )
             .attr("dy", 20);
 
         // function to format revenue value consistently
@@ -331,15 +387,14 @@ class revenueChart extends React.Component
         }
 
         // function to format GM% colour consistently
-        function gmPercentColour( gmPercent )
+        function gmPercentColour( gmPercent, target )
         {
-            if( gmPercent > 30 && gmPercent < 40 )
+            if( gmPercent >= target )
             {
                 return "#2dd00b";
             }
 
-            if( ( gmPercent > 25 && gmPercent <= 30 ) ||
-                ( gmPercent >= 40 && gmPercent < 45 ) )
+            if( ( gmPercent > ( target - 5 ) ) )
             {
                 return "#fbb829";
             }
