@@ -182,3 +182,19 @@ body {
 .revenueChart__activeSegmentLabelRevenueText {
     font-weight: bold;
 }
+
+.revenueChartLabel__gmBg {
+    fill: #e5e5e5;
+}
+
+.revenueChartLabel__gmBg--warning {
+    fill: #f02d52;
+}
+
+.revenueChartLabel__gmBg--caution {
+    fill: #fbb829;
+}
+
+.revenueChartLabel__gmBg--ok {
+    fill: #2dd00b;
+}

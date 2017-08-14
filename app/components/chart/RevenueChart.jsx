@@ -137,7 +137,7 @@ class revenueChart extends React.Component
                     d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","#666");
                     d3.select(".revenueChartLabel__type").text( d.data.name );
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( d.data.revenue ) );
-                    d3.select(".revenueChartLabel__gmBg").attr( "fill", "#e5e5e5");
+                    d3.select(".revenueChartLabel__gmBg").attr( "class", "revenueChartLabel__gmBg");
                     d3.select(".revenueChartLabel__gmPercent")
                         .attr( "fill", "#333")
                         .text( formatGM( d.data.gmPercent ) );
@@ -167,7 +167,8 @@ class revenueChart extends React.Component
                     d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
                     d3.select(".revenueChartLabel__type").text( totals.displayName );
                     d3.select(".revenueChartLabel__revenueValue").text( formatCurrency( totals.revenue ) );
-                    d3.select(".revenueChartLabel__gmBg").attr( "fill", gmPercentColour( totals.gmPercent, targetGM ) );
+                    d3.select(".revenueChartLabel__gmBg")
+                        .attr( "class", "revenueChartLabel__gmBg revenueChartLabel__gmBg--" + gmPercentColour( totals.gmPercent, targetGM ) );
                     d3.select(".revenueChartLabel__gmPercent")
                         .attr( "fill", "#fff")
                         .text( formatGM( totals.gmPercent ) );
@@ -278,7 +279,7 @@ class revenueChart extends React.Component
 
         // gm percent text background
         pieFg.append("rect")
-            .classed("revenueChartLabel__gmBg", true)
+            .attr("class", "revenueChartLabel__gmBg revenueChartLabel__gmBg--" + gmPercentColour( totals.gmPercent, targetGM ))
             .attr("height", gmPercentPanel.height )
             .attr("width", gmPercentPanel.width )
             .attr("x", ( width / 2 ) - ( gmPercentPanel.width / 2 ) )
@@ -391,15 +392,15 @@ class revenueChart extends React.Component
         {
             if( gmPercent >= target )
             {
-                return "#2dd00b";
+                return "ok";
             }
 
-            if( ( gmPercent > ( target - 5 ) ) )
+            if( ( gmPercent >= ( target - 3 ) ) )
             {
-                return "#fbb829";
+                return "caution";
             }
 
-            return "#f02d52";
+            return "warning";
         }
     }
 
