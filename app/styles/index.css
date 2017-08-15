@@ -206,3 +206,39 @@ body {
 .revenueChartLabel__gmPercent--hover {
     fill: #333;
 }
+
+/* chart colours */
+.revenueChart__arc--standard path,
+.revenueChart__targetArc path,
+.revenueChart__industryAverageText,
+.revenueChart__segmentLabel--standard rect,
+.revenueChart__averageLabel rect {
+    fill: #d6155d;
+}
+.revenueChart__targetLineEnd {
+    stroke: #d6155d;
+}
+.revenueChart__arc--discount path,
+.revenueChart__segmentLabel--discount rect {
+    fill: #dc3875;
+}
+.revenueChart__arc--contract path,
+.revenueChart__segmentLabel--contract rect {
+    fill: #e25b8d;
+}
+.revenueChart__arc--promotional path,
+.revenueChart__segmentLabel--promotional rect {
+    fill: #e87fa6;
+}
+.revenueChart__arc--segmented path,
+.revenueChart__segmentLabel--segmented rect {
+    fill: #efa1be;
+}
+
+.revenueChart__arc--blank path {
+    fill: #e5e5e5;
+}
+
+.revenueChart__arc--hover path {
+    fill: #666;
+}

@@ -24,8 +24,6 @@ function _drawRevenueMixChart( data, totals, targetGM )
     const targetRadius = ( Math.min(innerWidth, innerHeight) / 2 );
     const radius = targetRadius - targetRadiusGap;
 
-    const color = d3.scaleOrdinal(["#d6155d", "#dc3875", "#e25b8d", "#e87fa6", "#efa1be"]);
-
     d3.select(".revenueChart svg").remove();
 
     let svg = d3.select(".revenueChart").append("svg")
@@ -85,8 +83,11 @@ function _drawRevenueMixChart( data, totals, targetGM )
             .append("g")
             .attr("class", d => { return "revenueChart__arc revenueChart__arc--" + d.data.name.toLowerCase() })
             .on("mouseover", function(d,i){
-                d3.selectAll(".revenueChart__arc path").attr("fill","#e5e5e5");
-                d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase()  + " path").attr("fill","#666");
+                d3.selectAll(".revenueChart__arc")
+                    .classed("revenueChart__arc--blank", true);
+                d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase())
+                    .classed("revenueChart__arc--blank", false)
+                    .classed("revenueChart__arc--hover", true);
                 d3.select(".revenueChartLabel__type").text( d.data.name );
                 d3.select(".revenueChartLabel__revenueValue").text( _formatCurrency( d.data.revenue ) );
                 d3.select(".revenueChartLabel__gmBg").attr( "class", "revenueChartLabel__gmBg");
@@ -116,7 +117,9 @@ function _drawRevenueMixChart( data, totals, targetGM )
                     .attr("display", "block");
             })
             .on("mouseout", function(d,i){
-                d3.selectAll(".revenueChart__arc path").attr("fill", d => { return color(d.index); });
+                d3.selectAll(".revenueChart__arc")
+                    .classed("revenueChart__arc--blank", false)
+                    .classed("revenueChart__arc--hover", false);
                 d3.select(".revenueChartLabel__type").text( totals.displayName );
                 d3.select(".revenueChartLabel__revenueValue").text( _formatCurrency( totals.revenue ) );
                 d3.select(".revenueChartLabel__gmBg")
@@ -139,8 +142,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
             });
 
     arc.append("path")
-        .attr("d", path)
-        .attr("fill", d => { return color(d.index); });
+        .attr("d", path);
 
     // add industry average target pie arcs to the chart
     let targetPie = d3.pie()
@@ -168,16 +170,14 @@ function _drawRevenueMixChart( data, totals, targetGM )
             .attr("class", d => { return "revenueChart__targetArc revenueChart__targetArc--" + d.data.name.toLowerCase() });
 
     targetArc.append("path")
-        .attr("d", targetPath)
-        .attr("fill", color(0));
+        .attr("d", targetPath);
 
     targetArc.append("line")
         .classed("revenueChart__targetLineEnd", true)
         .attr("x1", 0)
         .attr("y1", 0)
         .attr("x2", d => { return (targetRadius + 5) * Math.sin(d.endAngle); })
-        .attr("y2", d => { return (targetRadius + 5) * Math.cos(d.endAngle) * -1; })
-        .attr("stroke", color(0));
+        .attr("y2", d => { return (targetRadius + 5) * Math.cos(d.endAngle) * -1; });
 
     targetArc.append("text")
         .classed("revenueChart__industryAverageText", true)
@@ -203,8 +203,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
             }
             
             return targetTickEnd - (height / 2);
-        })
-        .attr("fill", color(0));
+        });
 
     // add foreground data circle
     pieFg.append("circle")
@@ -255,15 +254,14 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .data( dealerPieData )
         .enter()
             .append("g")
-                .classed("revenueChart__segmentLabel", true);
+                .attr("class", d => { return "revenueChart__segmentLabel revenueChart__segmentLabel--" + d.data.name.toLowerCase() } );
 
     segmentLabel
         .append("rect")
         .attr("rx", 4)
         .attr("ry", 4)
         .attr("x", 0)
-        .attr("y", (d,i) => 48 * i )
-        .attr("fill", d => color(d.index) );
+        .attr("y", (d,i) => 48 * i );
 
     segmentLabel
         .append("text")
@@ -311,8 +309,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .attr("rx", 4)
         .attr("ry", 4)
         .attr("x", 0)
-        .attr("y", 48 )
-        .attr("fill", color(0) );
+        .attr("y", 48);
 
     averageLabel
         .append("text")
