@@ -16,7 +16,7 @@ let RevenueMix = require('./components/RevenueMix.jsx');
 let store = createStore( gmRevenueMixApp, INITIAL_STATE );
 
 // specific dealer map styles
-require('./styles/index.css');
+require('./styles/index.less');
 
 // React entry point for the dealer map
 ReactDOM.render(

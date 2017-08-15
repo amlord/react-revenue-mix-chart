@@ -208,31 +208,33 @@ body {
 }
 
 /* chart colours */
+@chartColour: #003a5d;
+
 .revenueChart__arc--standard path,
 .revenueChart__targetArc path,
 .revenueChart__industryAverageText,
 .revenueChart__segmentLabel--standard rect,
 .revenueChart__averageLabel rect {
-    fill: #d6155d;
+    fill: @chartColour;
 }
 .revenueChart__targetLineEnd {
-    stroke: #d6155d;
+    stroke: @chartColour;
 }
 .revenueChart__arc--discount path,
 .revenueChart__segmentLabel--discount rect {
-    fill: #dc3875;
+    fill: lighten(@chartColour, 15%);
 }
 .revenueChart__arc--contract path,
 .revenueChart__segmentLabel--contract rect {
-    fill: #e25b8d;
+    fill: lighten(@chartColour, 30%);
 }
 .revenueChart__arc--promotional path,
 .revenueChart__segmentLabel--promotional rect {
-    fill: #e87fa6;
+    fill: lighten(@chartColour, 45%);
 }
 .revenueChart__arc--segmented path,
 .revenueChart__segmentLabel--segmented rect {
-    fill: #efa1be;
+    fill: lighten(@chartColour, 60%);
 }
 
 .revenueChart__arc--blank path {
