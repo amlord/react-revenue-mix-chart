@@ -140,27 +140,19 @@ body {
     display: block;
 }   
 
-.revenueChart__targetArc path {
-    fill: #0092cc;
-}
-
 .revenueChart__targetLineEnd {
-    stroke: #0092cc;
     stroke-width: 1;
 }
 
 .revenueChart__industryAverageText {
-    fill: #0092cc;
     font-size: 10px;
 }
 
 .revenueChart__segmentLabels rect,
 .revenueChart__averageLabel rect,
 .revenueChart__activeSegmentLabel rect {
-    stroke: #ccc;
-    stroke-width: 1px;
     height: 32px;
-    width: 16px;
+    width: 32px;
 }
 
 .revenueChart__activeSegmentLabel rect {
@@ -188,11 +180,11 @@ body {
 }
 
 .revenueChartLabel__gmBg--warning {
-    fill: #f02d52;
+    fill: #f21000;
 }
 
 .revenueChartLabel__gmBg--caution {
-    fill: #fbb829;
+    fill: #ffd700;
 }
 
 .revenueChartLabel__gmBg--ok {

@@ -72,7 +72,7 @@ class revenueChart extends React.Component
         const targetRadius = ( Math.min(innerWidth, innerHeight) / 2 );
         const radius = targetRadius - targetRadiusGap;
 
-        const color = d3.scaleOrdinal(["#e1f3fb", "#b6e2f5", "#7dcbec", "#52b9e6", "#0092cc"]);
+        const color = d3.scaleOrdinal(["#d6155d", "#dc3875", "#e25b8d", "#e87fa6", "#efa1be"]);
 
         d3.select(".revenueChart svg").remove();
 
@@ -216,14 +216,16 @@ class revenueChart extends React.Component
                 .attr("class", d => { return "revenueChart__targetArc revenueChart__targetArc--" + d.data.name.toLowerCase() });
 
         targetArc.append("path")
-            .attr("d", targetPath);
+            .attr("d", targetPath)
+            .attr("fill", color(0));
 
         targetArc.append("line")
             .classed("revenueChart__targetLineEnd", true)
             .attr("x1", 0)
             .attr("y1", 0)
             .attr("x2", d => { return (targetRadius + 5) * Math.sin(d.endAngle); })
-            .attr("y2", d => { return (targetRadius + 5) * Math.cos(d.endAngle) * -1; });
+            .attr("y2", d => { return (targetRadius + 5) * Math.cos(d.endAngle) * -1; })
+            .attr("stroke", color(0));
 
         targetArc.append("text")
             .classed("revenueChart__industryAverageText", true)
@@ -249,7 +251,8 @@ class revenueChart extends React.Component
                 }
                 
                 return targetTickEnd - (height / 2);
-            });
+            })
+            .attr("fill", color(0));
 
         // add foreground data circle
         pieFg.append("circle")
@@ -314,7 +317,7 @@ class revenueChart extends React.Component
             .append("text")
             .classed("revenueChart__segmentLabelTitleText", true)
             .text( d => d.data.name )
-            .attr("x", 22)
+            .attr("x", 38)
             .attr("y", (d,i) => 48 * i )
             .attr("dy", 3);
 
@@ -322,7 +325,7 @@ class revenueChart extends React.Component
             .append("text")
             .classed("revenueChart__segmentLabelRevenueText", true)
             .text( d => formatCurrency( d.data.revenue ) )
-            .attr("x", 22)
+            .attr("x", 38)
             .attr("y", (d,i) => 48 * i )
             .attr("dy", 20);
         
@@ -338,7 +341,7 @@ class revenueChart extends React.Component
             .append("text")
             .classed("revenueChart__activeSegmentLabelTitleText", true)
             .text( "Industry average" )
-            .attr("x", 22)
+            .attr("x", 38)
             .attr("y", 0 )
             .attr("dy", 3);
 
@@ -346,7 +349,7 @@ class revenueChart extends React.Component
             .append("text")
             .classed("revenueChart__activeSegmentLabelRevenueText", true)
             .text( "Revenue Mix" )
-            .attr("x", 22)
+            .attr("x", 38)
             .attr("y", 0 )
             .attr("dy", 20);
         
@@ -357,13 +360,13 @@ class revenueChart extends React.Component
             .attr("ry", 4)
             .attr("x", 0)
             .attr("y", 48 )
-            .attr("fill", color(dealerPieData.length - 1) );
+            .attr("fill", color(0) );
 
         averageLabel
             .append("text")
             .classed("revenueChart__averageLabelTitleText", true)
             .text( "Industry average" )
-            .attr("x", 22)
+            .attr("x", 38)
             .attr("y", 48 )
             .attr("dy", 3);
 
@@ -371,7 +374,7 @@ class revenueChart extends React.Component
             .append("text")
             .classed("revenueChart__averageLabelRevenueText", true)
             .text( "Revenue Mix" )
-            .attr("x", 22)
+            .attr("x", 38)
             .attr("y", 48 )
             .attr("dy", 20);
 
