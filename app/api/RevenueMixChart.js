@@ -261,14 +261,14 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .attr("rx", 4)
         .attr("ry", 4)
         .attr("x", 0)
-        .attr("y", (d,i) => 48 * i );
+        .attr("y", (d,i) => 40 * i );
 
     segmentLabel
         .append("text")
         .classed("revenueChart__segmentLabelTitleText", true)
         .text( d => d.data.name )
         .attr("x", 38)
-        .attr("y", (d,i) => 48 * i )
+        .attr("y", (d,i) => 40 * i )
         .attr("dy", 3);
 
     segmentLabel
@@ -276,7 +276,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .classed("revenueChart__segmentLabelRevenueText", true)
         .text( d => _formatCurrency( d.data.revenue ) )
         .attr("x", 38)
-        .attr("y", (d,i) => 48 * i )
+        .attr("y", (d,i) => 40 * i )
         .attr("dy", 20);
     
     // add industry average label
@@ -309,14 +309,14 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .attr("rx", 4)
         .attr("ry", 4)
         .attr("x", 0)
-        .attr("y", 48);
+        .attr("y", 40);
 
     averageLabel
         .append("text")
         .classed("revenueChart__averageLabelTitleText", true)
         .text( "Industry average" )
         .attr("x", 38)
-        .attr("y", 48 )
+        .attr("y", 40 )
         .attr("dy", 3);
 
     averageLabel
@@ -324,7 +324,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .classed("revenueChart__averageLabelRevenueText", true)
         .text( "Revenue Mix" )
         .attr("x", 38)
-        .attr("y", 48 )
+        .attr("y", 40 )
         .attr("dy", 20);
 }
 
