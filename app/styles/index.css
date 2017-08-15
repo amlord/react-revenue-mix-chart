@@ -183,10 +183,26 @@ body {
     fill: #f21000;
 }
 
+.revenueChartLabel__gmPercent--warning {
+    fill: #fff;
+}
+
 .revenueChartLabel__gmBg--caution {
     fill: #ffd700;
 }
 
+.revenueChartLabel__gmPercent--caution {
+    fill: #333;
+}
+
 .revenueChartLabel__gmBg--ok {
     fill: #2dd00b;
+}
+
+.revenueChartLabel__gmPercent--ok {
+    fill: #fff;
+}
+
+.revenueChartLabel__gmPercent--hover {
+    fill: #333;
 }
