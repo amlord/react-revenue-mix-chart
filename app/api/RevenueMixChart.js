@@ -269,7 +269,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( d => d.data.name )
         .attr("x", 38)
         .attr("y", (d,i) => 40 * i )
-        .attr("dy", 3);
+        .attr("dy", 4);
 
     segmentLabel
         .append("text")
@@ -277,7 +277,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( d => _formatCurrency( d.data.revenue ) )
         .attr("x", 38)
         .attr("y", (d,i) => 40 * i )
-        .attr("dy", 20);
+        .attr("dy", 19);
     
     // add industry average label
     activeSegmentLabel
@@ -293,7 +293,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( "Industry average" )
         .attr("x", 38)
         .attr("y", 0 )
-        .attr("dy", 3);
+        .attr("dy", 4);
 
     activeSegmentLabel
         .append("text")
@@ -301,7 +301,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( "Revenue Mix" )
         .attr("x", 38)
         .attr("y", 0 )
-        .attr("dy", 20);
+        .attr("dy", 19);
     
     // add industry average label
     averageLabel
@@ -317,7 +317,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( "Industry average" )
         .attr("x", 38)
         .attr("y", 40 )
-        .attr("dy", 3);
+        .attr("dy", 4);
 
     averageLabel
         .append("text")
@@ -325,7 +325,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( "Revenue Mix" )
         .attr("x", 38)
         .attr("y", 40 )
-        .attr("dy", 20);
+        .attr("dy", 19);
 }
 
 // function to format revenue value consistently
