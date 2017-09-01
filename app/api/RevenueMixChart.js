@@ -58,10 +58,6 @@ function _drawRevenueMixChart( data, totals, targetGM )
     let segmentLabels = svg.append("g")
                     .classed("revenueChart__segmentLabels", true);
     
-    let activeSegmentLabel = svg.append("g")
-                    .classed("revenueChart__activeSegmentLabel", true)
-                    .attr("display", "none");
-    
     let averageLabel = svg.append("g")
                     .classed("revenueChart__averageLabel", true)
                     .attr("display", "none");
@@ -83,62 +79,10 @@ function _drawRevenueMixChart( data, totals, targetGM )
             .append("g")
             .attr("class", d => { return "revenueChart__arc revenueChart__arc--" + d.data.name.toLowerCase() })
             .on("mouseover", function(d,i){
-                d3.selectAll(".revenueChart__arc")
-                    .classed("revenueChart__arc--blank", true);
-                d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase())
-                    .classed("revenueChart__arc--blank", false)
-                    .classed("revenueChart__arc--hover", true);
-                d3.select(".revenueChartLabel__type").text( d.data.name );
-                d3.select(".revenueChartLabel__revenueValue").text( _formatCurrency( d.data.revenue ) );
-                d3.select(".revenueChartLabel__gmBg").attr( "class", "revenueChartLabel__gmBg");
-                d3.select(".revenueChartLabel__gmPercent")
-                    .classed("revenueChartLabel__gmPercent--hover", true)
-                    .text( _formatGM( d.data.gmPercent ) );
-
-                d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
-                    .classed("revenueChart__targetArc--visible", true);
-                
-                d3.selectAll(".revenueChart__segmentLabels")
-                    .attr("display", "none");
-
-                d3.selectAll(".revenueChart__activeSegmentLabelTitleText")
-                    .text(d.data.name);
-
-                d3.selectAll(".revenueChart__activeSegmentLabelRevenueText")
-                    .text(d.data.revenuePercent + "%");
-                
-                d3.selectAll(".revenueChart__activeSegmentLabel")
-                    .attr("display", "block");
-
-                d3.selectAll(".revenueChart__averageLabelRevenueText")
-                    .text(d.data.industryRevenuePercent + "%");
-
-                d3.selectAll(".revenueChart__averageLabel")
-                    .attr("display", "block");
+                _sectionSelect(d);
             })
             .on("mouseout", function(d,i){
-                d3.selectAll(".revenueChart__arc")
-                    .classed("revenueChart__arc--blank", false)
-                    .classed("revenueChart__arc--hover", false);
-                d3.select(".revenueChartLabel__type").text( totals.displayName );
-                d3.select(".revenueChartLabel__revenueValue").text( _formatCurrency( totals.revenue ) );
-                d3.select(".revenueChartLabel__gmBg")
-                    .attr( "class", "revenueChartLabel__gmBg revenueChartLabel__gmBg--" + _gmPercentColour( totals.gmPercent, targetGM ) );
-                d3.select(".revenueChartLabel__gmPercent")
-                    .classed("revenueChartLabel__gmPercent--hover", false)
-                    .text( _formatGM( totals.gmPercent ) );
-
-                d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
-                    .classed("revenueChart__targetArc--visible", false);
-                
-                d3.selectAll(".revenueChart__segmentLabels")
-                    .attr("display", "block");
-
-                d3.selectAll(".revenueChart__activeSegmentLabel")
-                    .attr("display", "none");
-
-                d3.selectAll(".revenueChart__averageLabel")
-                    .attr("display", "none");
+                _sectionClear(d, totals, targetGM);
             });
 
     arc.append("path")
@@ -258,6 +202,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
 
     segmentLabel
         .append("rect")
+        .attr("class", d => { return "revenueChart__segmentLabelKey revenueChart__segmentLabelKey--" + d.data.name.toLowerCase() })
         .attr("rx", 4)
         .attr("ry", 4)
         .attr("x", 0)
@@ -269,7 +214,7 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( d => d.data.name )
         .attr("x", 38)
         .attr("y", (d,i) => 40 * i )
-        .attr("dy", 4);
+        .attr("dy", 3);
 
     segmentLabel
         .append("text")
@@ -277,55 +222,45 @@ function _drawRevenueMixChart( data, totals, targetGM )
         .text( d => _formatCurrency( d.data.revenue ) )
         .attr("x", 38)
         .attr("y", (d,i) => 40 * i )
-        .attr("dy", 19);
-    
-    // add industry average label
-    activeSegmentLabel
+        .attr("dy", 17);
+        
+    segmentLabel
         .append("rect")
-        .attr("rx", 4)
-        .attr("ry", 4)
+        .classed("revenueChart__segmentLabelOverlay", true)
         .attr("x", 0)
-        .attr("y", 0);
-
-    activeSegmentLabel
-        .append("text")
-        .classed("revenueChart__activeSegmentLabelTitleText", true)
-        .text( "Industry average" )
-        .attr("x", 38)
-        .attr("y", 0 )
-        .attr("dy", 4);
-
-    activeSegmentLabel
-        .append("text")
-        .classed("revenueChart__activeSegmentLabelRevenueText", true)
-        .text( "Revenue Mix" )
-        .attr("x", 38)
-        .attr("y", 0 )
-        .attr("dy", 19);
+        .attr("y", (d,i) => 40 * i )
+        .on("mouseover", function(d,i){
+            _sectionSelect(d);
+        })
+        .on("mouseout", function(d,i){
+            _sectionClear(d, totals, targetGM);
+        });
     
     // add industry average label
+    let xPositon = width - 32;
+
     averageLabel
         .append("rect")
         .attr("rx", 4)
         .attr("ry", 4)
-        .attr("x", 0)
-        .attr("y", 40);
+        .attr("x", xPositon)
+        .attr("y", 0);
 
     averageLabel
         .append("text")
         .classed("revenueChart__averageLabelTitleText", true)
         .text( "Industry average" )
-        .attr("x", 38)
-        .attr("y", 40 )
-        .attr("dy", 4);
+        .attr("x", xPositon - 6)
+        .attr("y", 0 )
+        .attr("dy", 3);
 
     averageLabel
         .append("text")
         .classed("revenueChart__averageLabelRevenueText", true)
         .text( "Revenue Mix" )
-        .attr("x", 38)
-        .attr("y", 40 )
-        .attr("dy", 19);
+        .attr("x", xPositon - 6)
+        .attr("y", 0 )
+        .attr("dy", 17);
 }
 
 // function to format revenue value consistently
@@ -354,6 +289,68 @@ function _gmPercentColour( gmPercent, target )
     }
 
     return "warning";
+}
+
+function _sectionSelect(d)
+{
+    d3.selectAll(".revenueChart__arc")
+        .classed("revenueChart__arc--blank", true);
+
+    d3.selectAll(".revenueChart__arc--" + d.data.name.toLowerCase())
+        .classed("revenueChart__arc--blank", false)
+        .classed("revenueChart__arc--hover", true);
+
+    d3.select(".revenueChartLabel__type").text( d.data.name );
+
+    d3.select(".revenueChartLabel__revenueValue").text( _formatCurrency( d.data.revenue ) );
+
+    d3.select(".revenueChartLabel__gmBg").attr( "class", "revenueChartLabel__gmBg");
+
+    d3.select(".revenueChartLabel__gmPercent")
+        .classed("revenueChartLabel__gmPercent--hover", true)
+        .text( _formatGM( d.data.gmPercent ) );
+
+    d3.selectAll(".revenueChart__segmentLabel")
+        .classed("revenueChart__segmentLabel--blank", true);
+
+    d3.selectAll(".revenueChart__segmentLabel--" + d.data.name.toLowerCase())
+        .classed("revenueChart__segmentLabel--blank", false);
+
+    d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
+        .classed("revenueChart__targetArc--visible", true);
+
+    d3.selectAll(".revenueChart__averageLabelRevenueText")
+        .text(d.data.industryRevenuePercent + "%");
+
+    d3.selectAll(".revenueChart__averageLabel")
+        .attr("display", "block");
+}
+
+function _sectionClear(d, totals, targetGM)
+{
+    d3.selectAll(".revenueChart__arc")
+        .classed("revenueChart__arc--blank", false)
+        .classed("revenueChart__arc--hover", false);
+
+    d3.select(".revenueChartLabel__type").text( totals.displayName );
+
+    d3.select(".revenueChartLabel__revenueValue").text( _formatCurrency( totals.revenue ) );
+
+    d3.select(".revenueChartLabel__gmBg")
+        .attr( "class", "revenueChartLabel__gmBg revenueChartLabel__gmBg--" + _gmPercentColour( totals.gmPercent, targetGM ) );
+
+    d3.select(".revenueChartLabel__gmPercent")
+        .classed("revenueChartLabel__gmPercent--hover", false)
+        .text( _formatGM( totals.gmPercent ) );
+        
+    d3.selectAll(".revenueChart__segmentLabel")
+        .classed("revenueChart__segmentLabel--blank", false);
+
+    d3.selectAll(".revenueChart__targetArc--" + d.data.name.toLowerCase())
+        .classed("revenueChart__targetArc--visible", false);
+
+    d3.selectAll(".revenueChart__averageLabel")
+        .attr("display", "none");
 }
 
 // ***** PUBLIC FUNCTIONS ****************************************************

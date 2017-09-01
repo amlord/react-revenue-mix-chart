@@ -148,11 +148,16 @@ body {
     font-size: 10px;
 }
 
-.revenueChart__segmentLabels rect,
+.revenueChart__segmentLabelKey,
 .revenueChart__averageLabel rect,
 .revenueChart__activeSegmentLabel rect {
     height: 32px;
     width: 32px;
+}
+
+.revenueChart__segmentLabelOverlay {
+    height: 40px;
+    width: 105px;
 }
 
 .revenueChart__activeSegmentLabel rect {
@@ -173,6 +178,11 @@ body {
 .revenueChart__averageLabelRevenueText,
 .revenueChart__activeSegmentLabelRevenueText {
     font-weight: bold;
+}
+
+.revenueChart__averageLabelTitleText,
+.revenueChart__averageLabelRevenueText {
+    text-anchor: end;
 }
 
 .revenueChartLabel__gmBg {
@@ -213,7 +223,7 @@ body {
 .revenueChart__arc--standard path,
 .revenueChart__targetArc path,
 .revenueChart__industryAverageText,
-.revenueChart__segmentLabel--standard rect,
+.revenueChart__segmentLabelKey--standard,
 .revenueChart__averageLabel rect {
     fill: @chartColour;
 }
@@ -221,26 +231,28 @@ body {
     stroke: @chartColour;
 }
 .revenueChart__arc--discount path,
-.revenueChart__segmentLabel--discount rect {
+.revenueChart__segmentLabelKey--discount {
     fill: lighten(@chartColour, 15%);
 }
 .revenueChart__arc--contract path,
-.revenueChart__segmentLabel--contract rect {
+.revenueChart__segmentLabelKey--contract {
     fill: lighten(@chartColour, 30%);
 }
 .revenueChart__arc--promotional path,
-.revenueChart__segmentLabel--promotional rect {
+.revenueChart__segmentLabelKey--promotional {
     fill: lighten(@chartColour, 45%);
 }
 .revenueChart__arc--segmented path,
-.revenueChart__segmentLabel--segmented rect {
+.revenueChart__segmentLabelKey--segmented {
     fill: lighten(@chartColour, 60%);
 }
 
+.revenueChart__segmentLabel--blank .revenueChart__segmentLabelKey,
+.revenueChart__segmentLabel--blank text,
 .revenueChart__arc--blank path {
     fill: #e5e5e5;
 }
 
-.revenueChart__arc--hover path {
-    fill: #666;
+.revenueChart__segmentLabelOverlay {
+    fill: transparent;
 }
